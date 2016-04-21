@@ -1,0 +1,40 @@
+{
+    "env": {
+        "browser": true,
+        "node": true,
+        "es6": true
+    },
+
+    "plugins": [ "react" ],
+
+    "parser": "babel-eslint",
+    "parserOptions": {
+        "ecmaFeatures": {
+          "jsx": true
+        }
+    },
+
+    "extends": [
+        "eslint:recommended",
+        "mourner",
+        "plugin:react/recommended"
+    ],
+
+    "rules": {
+        "complexity": ["warn", 7],
+        "semi": "error",
+        "curly": ["error", "multi-line"],
+        "block-scoped-var": "error",
+        "global-require": "off",
+        "camelcase": "off",
+        "no-use-before-define": "off",
+        "arrow-parens": "error",
+        "arrow-spacing": "error",
+        "constructor-super": "error",
+        "no-const-assign": "error",
+        "no-var": "error",
+        "prefer-arrow-callback": "error",
+        "prefer-const": "error",
+        "indent": "error"
+    }
+}
