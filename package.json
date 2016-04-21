@@ -1,0 +1,19 @@
+{
+  "name": "fastidious",
+  "version": "1.0.0",
+  "description": "",
+  "main": "artifacts/code/index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "start": "make all && electron ."
+  },
+  "author": "",
+  "license": "ISC",
+  "dependencies": {
+    "electron-prebuilt": "^0.37.6"
+  },
+  "devDependencies": {
+    "typescript": "^1.8.10",
+    "typings": "^0.8.1"
+  }
+}
