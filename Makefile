@@ -11,7 +11,7 @@ clean:
 typings: typings.json
 	typings install
 
-artifacts/code/%.js: code/%.tsx typings Makefile
+artifacts/code/%.js: code/%.tsx typings
 	@mkdir -p "$(@D)"
 	tslint $<
 	tsc \
@@ -23,6 +23,3 @@ artifacts/code/%.js: code/%.tsx typings Makefile
 artifacts/code/index.html: code/index.html
 	@mkdir -p "$(@D)"
 	cp $< $@
-
-node_modules: package.json
-	npm install
