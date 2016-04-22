@@ -11,6 +11,7 @@ typings: typings.json
 
 artifacts/code/%.js: code/%.tsx typings
 	@mkdir -p "$(@D)"
+	tslint $<
 	tsc \
 		--outDir artifacts/code \
 		typings/main.d.ts \
