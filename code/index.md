@@ -2,5 +2,5 @@ _We need the tonic of wildness... At the same time that we are earnest to explor
 
 <ArrayView
     ElementView={GitHubIssueView}
-    value={GitHubIssue.search('assignee:lucaswoj is:public type:issue is:open')}
+    value={GitHubIssue.search('shipit in:comment')}
 />
