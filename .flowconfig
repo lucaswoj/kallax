@@ -7,6 +7,7 @@
 [libs]
 
 interfaces
+code/interfaces
 
 [options]
 

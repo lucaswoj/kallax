@@ -4,7 +4,7 @@
   "description": "",
   "main": "code/index.js",
   "scripts": {
-    "test": "eslint code && flow",
+    "test": "eslint --fix code && flow",
     "start": "electron ."
   },
   "author": "",
@@ -21,11 +21,11 @@
     "electron-prebuilt-compile": "^0.37.8",
     "eslint": "^2.9.0",
     "eslint-config-mourner": "^2.0.1",
+    "eslint-plugin-flow-vars": "^0.4.0",
     "eslint-plugin-flowtype": "^2.2.7",
     "eslint-plugin-react": "^5.0.1",
     "lodash": "^4.12.0",
     "marked": "^0.3.5",
-    "node-fetch": "^1.5.1",
     "react": "^15.0.1",
     "react-dom": "^15.0.1"
   },

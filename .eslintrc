@@ -5,7 +5,7 @@
         "es6": true
     },
 
-    "plugins": [ "react" ],
+    "plugins": [ "react", "flow-vars" ],
 
     "parser": "babel-eslint",
     "parserOptions": {
@@ -35,6 +35,8 @@
         "no-var": "error",
         "prefer-arrow-callback": "error",
         "prefer-const": "error",
-        "indent": "error"
+        "indent": "error",
+        "flow-vars/define-flow-type": 1,
+        "flow-vars/use-flow-type": 1
     }
 }
