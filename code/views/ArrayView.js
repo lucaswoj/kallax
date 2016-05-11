@@ -8,79 +8,54 @@ const _ = require('lodash');
 
 const MAX_LENGTH = 200;
 
-module.exports = class ArrayView<T> extends View<void, Props<T>, State<T>> {
+module.exports = class AsyncIteratorView<T> extends View<void, Props<T>, State<T>> {
 
     constructor(props: Props) {
         super(props);
-        this.state = {elements: [], done: false};
-    }
 
-    componentDidMount() {
-        const value = this.props.value;
-        const iterator = value.next ? value : value[Symbol.iterator]();
+        const fetchNext = (itemIndex, iterator) => {
+            iterator.next().then((iterator) => {
+                const isDone = iterator.done || itemIndex >= MAX_LENGTH;
+                this.setState({
+                    elements: this.state.elements.concat(iterator.value),
+                    done: isDone
+                });
+                if (!isDone) fetchNext(itemIndex + 1, iterator);
+            }, (error) => {
+                this.setState({
+                    error,
+                    elements: this.state.elements,
+                    done: this.state.done
+                });
+            });
+        };
 
-        visitIterator(
-            iterator,
-            (iterator, index) => {
-                if (this.state.done || iterator.done || index >= MAX_LENGTH) {
-                    this.setState(_.extend(this.state, {done: true}));
-                    return true;
-                } else {
-                    this.setState(_.extend(this.state, {
-                        elements: this.state.elements.concat(iterator.value)
-                    }));
-                    return false;
-                }
-            },
-            (error) => {
-                console.error(error);
-                this.setState(_.extend(this.state, {error}));
-            }
-        );
-    }
-
-    componentWillUnmount() {
-        this.setState(_.extend({done: true}, this.state));
+        if (_.isArray(this.props.value)) {
+            this.state = {elements: this.props.value, done: true};
+        } else {
+            this.state = {elements: [], done: false};
+            fetchNext(0, this.props.value);
+        }
     }
 
     render() {
         return <div>
-            { this.renderElements() }
-            { this.state.done ? null : <LoadingView /> }
-            { this.state.error ? <ErrorView error={this.state.error} /> : null }
+            {this.state.elements.map((element:T, i) => {
+                return <this.props.ElementView value={element} key={i} />;
+            })}
+            {!this.state.error && this.state.done ? <LoadingView /> : null }
+            {this.state.error ? <ErrorView error={this.state.error} /> : null }
         </div>;
-    }
-
-    renderElements() {
-        return this.state.elements.map((element, i) => {
-            return <this.props.ElementView value={element} key={i} />;
-        });
     }
 };
 
 type Props<T> = {
     ElementView: typeof View;
-    value: Iterator<T> | AsyncIterator<T> | Iterable<T>;
+    value: AsyncIterator<T> | Array<T>;
 }
 
 type State<T> = {
     elements: Array<T>;
     done: boolean;
     error: Error;
-}
-
-function visitIterator(iterator, visitor, errorCallback, index = 0) {
-    const nextIterator = iterator.next();
-
-    if (nextIterator.then) {
-        nextIterator.then(inner, errorCallback);
-    } else {
-        inner(nextIterator);
-    }
-
-    function inner(iterator) {
-        if (!visitor(iterator, index) && !iterator.done) {
-            visitIterator(iterator, visitor, errorCallback, index + 1);
-        }
-    }
 }

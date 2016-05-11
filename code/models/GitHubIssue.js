@@ -33,23 +33,23 @@ type Serialized = {
 function fetchIssues(pathname, query): AsyncIterator<GitHubIssue> {
     const pages = [];
 
-    function fetchIssue(index, pathname, query) {
-        const pageIndex = Math.floor(index / ISSUES_PER_PAGE);
+    function fetchIssue(itemIndex, pathname, query) {
+        const pageIndex = Math.floor(itemIndex / ISSUES_PER_PAGE);
         pages[pageIndex] = pages[pageIndex] || fetchIssuesPage(pageIndex, pathname, query);
 
         return pages[pageIndex].then((page) => {
-            if (index < page.total_count) {
+            if (page.total_count < itemIndex) {
                 return {
-                    value: new GitHubIssue(page.items[index % ISSUES_PER_PAGE]),
+                    value: new GitHubIssue(page.items[itemIndex % ISSUES_PER_PAGE]),
                     done: false,
-                    next: () => fetchIssue(index + 1, pathname, query)
+                    next: () => fetchIssue(itemIndex + 1, pathname, query)
                 };
 
             } else {
                 return {
                     value: null,
                     done: true,
-                    next: () => fetchIssue(index, pathname, query)
+                    next: () => fetchIssue(itemIndex, pathname, query)
                 };
             }
         });
