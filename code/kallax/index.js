@@ -18,6 +18,8 @@ app.on('window-all-closed', () => {
 // This method will be called when Electron has finished
 // initialization and is ready to create browser windows.
 app.on('ready', () => {
+    app.commandLine.appendSwitch('js-flags', '--harmony');
+
     // Create the browser window.
     mainWindow = new BrowserWindow({width: 1500, height: 1000});
 

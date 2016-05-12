@@ -1,5 +1,11 @@
 {
-    "presets": ["stage-0", "es2015", "react"],
+    "presets": ["react"],
     "sourceMaps": "inline",
-    "plugins": ["transform-class-properties"]
+    "plugins": [
+        "transform-class-properties",
+        "check-es2015-constants",
+        "transform-es2015-destructuring",
+        "transform-es2015-parameters",
+        "transform-es2015-block-scoping"
+    ]
 }
