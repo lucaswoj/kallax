@@ -1,0 +1,27 @@
+<!doctype html>
+<html>
+<head>
+    <meta charset="UTF-8">
+    <title>Fastidious</title>
+</head>
+<body>
+
+    <div id="kallax" />
+    <script>
+        var ReactDOM = require('react-dom');
+        var React = require('react');
+        var KallaxView = require('./KallaxView');
+
+        // Due to an apparent bug in Electron, this initialization must be in
+        // a `setTimeout` in order for the debugger to pause on exceptions and
+        // breakpoints.
+        setTimeout(() => {
+            ReactDOM.render(
+                React.createElement(KallaxView),
+                document.getElementById('kallax')
+            );
+        }, 0);
+    </script>
+
+</body>
+</html>

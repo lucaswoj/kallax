@@ -2,7 +2,7 @@
 
 const React = require('react');
 const assert = require('assert');
-const View = require('./View');
+const View = require('../View');
 const ErrorView = require('./ErrorView');
 const LoadingView = require('./LoadingView');
 

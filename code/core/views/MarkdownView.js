@@ -5,7 +5,7 @@ const renderMarkdown = require('marked');
 const FS = require('fs');
 const Babel = require('babel-core');
 const vm = require('vm');
-const View = require('./View');
+const View = require('../View');
 const Path = require('path');
 
 type Props = {
@@ -29,15 +29,15 @@ module.exports = class MarkdownView extends View<void, Props, void> {
     }
 
     getBabelOptions() {
-        const file = Path.join(__dirname, '../../.babelrc');
+        const file = Path.join(__dirname, '../../../.babelrc');
         return JSON.parse(FS.readFileSync(file, 'utf8'));
     }
 
     getContext() {
         const React = require('react');
-        const GitHubIssueView = require('./GitHubIssueView');
+        const GitHubIssueView = require('../../github/GitHubIssueView');
         const ArrayView = require('./ArrayView');
-        const GitHubIssue = require('../models/GitHubIssue');
+        const GitHubIssue = require('../../github/GitHubIssue');
 
         return {React, ArrayView, GitHubIssue, GitHubIssueView};
     }

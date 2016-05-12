@@ -1,9 +1,9 @@
 // @flow
 
 const React = require('react');
-const View = require('./View');
-const MarkdownView = require('./MarkdownView');
-const GitHubIssue = require('../models/GitHubIssue');
+const View = require('../core/View');
+const MarkdownView = require('../core/views/MarkdownView');
+const GitHubIssue = require('./GitHubIssue');
 
 type Props = {
     value: GitHubIssue
