@@ -1,0 +1,59 @@
+@cadance: 17px;
+
+@light: #666;
+@medium: #444;
+@dark: #222;
+
+body {
+    font-family: Helvetica;
+    font-size: 13px;
+    line-height: (@cadance / 12px) * 100%;
+    color: @medium;
+}
+
+img {
+    max-width: 100%;
+}
+
+h2 {
+    font-size: @cadance * 2;
+    line-height: 110%;
+    margin-bottom: @cadance;
+    font-weight: bold;
+    color: @dark;
+}
+
+p {
+    margin-bottom: @cadance;
+}
+
+.outline {
+    border: 1px #eee solid;
+    padding: 2 * @cadance 3 * @cadance;
+    margin-bottom: 2 * @cadance;
+    border-radius: 5px;
+}
+
+.KallaxView {
+    max-width: 35 * @cadance;
+    margin: 0 auto;
+    padding: 2 * @cadance;
+}
+
+.LoadingView {
+    width: @cadance * 2;
+    height: @cadance * 2;
+    margin: 0 auto;
+    background-color: #333;
+    border-radius: 100%;
+    animation: LoadingView 1.0s infinite ease-in-out;
+}
+
+@keyframes LoadingView {
+    0% {
+        transform: scale(0);
+    } 100% {
+        transform: scale(1.0);
+        opacity: 0;
+    }
+}

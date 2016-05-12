@@ -12,7 +12,7 @@ type Props = {
 module.exports = class GitHubIssueView extends View<void, Props, void> {
 
     render() {
-        return <div>
+        return <div className="GitHubIssueView outline">
             <h2>{this.props.value.title}</h2>
             <MarkdownView value={this.props.value.body} />
         </div>;

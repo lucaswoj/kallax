@@ -6,7 +6,7 @@ const View = require('../View');
 module.exports = class LoadingView extends View<void, void, void> {
 
     render() {
-        return <div>Loading...</div>;
+        return <div className="LoadingView" />;
     }
 
 };
