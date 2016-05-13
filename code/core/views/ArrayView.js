@@ -4,6 +4,7 @@ const React = require('react');
 const ErrorView = require('./ErrorView');
 const LoadingView = require('./LoadingView');
 const _ = require('lodash');
+const AsyncIteratorUtil = require('../util/AsyncIteratorUtil');
 
 const MAX_LENGTH = 200;
 
@@ -17,7 +18,7 @@ module.exports = class ArrayView<T> extends React.Component<void, Props<T>, Stat
     }
 
     componentDidMount() {
-        visitAsyncIterator(
+        AsyncIteratorUtil.each(
             this.props.value,
 
             // value callback
@@ -33,7 +34,7 @@ module.exports = class ArrayView<T> extends React.Component<void, Props<T>, Stat
             () => this.setState(_.extend(this.state, {done: true})),
 
             // error callback
-            (error) => {
+            (error: Error) => {
                 console.error(error);
                 this.setState(_.extend(this.state, {error}));
             }
@@ -68,21 +69,4 @@ type State<T> = {
     elements: Array<T>;
     done: boolean;
     error?: Error;
-}
-
-function visitAsyncIterator<T>(
-        iterator: AsyncIterator<T>,
-        callback: (value: T, index: number) => boolean,
-        doneCallback: () => void,
-        errorCallback: (error: Error) => void,
-        index: number = 0
-) {
-    iterator.next().then((result: {value: T, done: boolean}) => {
-        const {value, done} = result;
-        if (!done && !callback(value, index)) {
-            visitAsyncIterator(iterator, callback, doneCallback, errorCallback, index);
-        } else {
-            doneCallback();
-        }
-    }, errorCallback);
 }
