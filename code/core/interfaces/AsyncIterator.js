@@ -1,7 +1,7 @@
 // @flow
 
+/* eslint-disable no-unused-vars */
+
 type AsyncIterator<T> = {
-    value: ?T;
-    done: boolean;
-    next: () => Promise<AsyncIterator<T>>;
+    next: () => Promise<{done: boolean, value: T}>;
 }

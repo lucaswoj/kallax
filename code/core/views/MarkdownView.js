@@ -5,18 +5,17 @@ const renderMarkdown = require('marked');
 const FS = require('fs');
 const Babel = require('babel-core');
 const vm = require('vm');
-const View = require('../View');
 const Path = require('path');
 
 type Props = {
     value: string;
-    isMarkdownX: string;
+    enableX?: boolean;
 }
 
-module.exports = class MarkdownView extends View<void, Props, void> {
+module.exports = class MarkdownView extends React.Component<void, Props, void> {
 
     render() {
-        if (this.props.isMarkdownX) {
+        if (this.props.enableX) {
             const jsxSource = '<div>' + renderMarkdown(this.props.value) + '</div>';
             const jsSource = Babel.transform(jsxSource, this.getBabelOptions()).code;
             return vm.runInNewContext(jsSource, this.getContext());

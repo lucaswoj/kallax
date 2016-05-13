@@ -41,22 +41,21 @@ function fetchIssues(pathname, query): AsyncIterator<GitHubIssue> {
             if (index < page.total_count) {
                 return {
                     value: new GitHubIssue(page.items[index % ISSUES_PER_PAGE]),
-                    done: false,
-                    next: () => fetchIssue(index + 1, pathname, query)
+                    done: false
                 };
 
             } else {
                 return {
                     value: null,
-                    done: true,
-                    next: () => fetchIssue(index, pathname, query)
+                    done: true
                 };
             }
         });
     }
 
+    let index = 0;
     return {
-        next: () => fetchIssue(0, pathname, query),
+        next: () => fetchIssue(index++, pathname, query),
         done: false,
         value: null
     };

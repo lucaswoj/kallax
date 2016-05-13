@@ -1,16 +1,15 @@
 // @flow
 
 const React = require('react');
-const View = require('../View');
 
 type Props = {
     error: Error;
 };
 
-module.exports = class ErrorView extends View<void, Props, void> {
+module.exports = class ErrorView extends React.Component<void, Props, void> {
 
     render() {
-        return <div>Error! {this.props.error.toString()}</div>;
+        return <div>Error! {this.props.error}</div>;
     }
 
 };

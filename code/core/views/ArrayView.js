@@ -1,14 +1,15 @@
 // @flow
 
 const React = require('react');
-const View = require('../View');
 const ErrorView = require('./ErrorView');
 const LoadingView = require('./LoadingView');
 const _ = require('lodash');
 
 const MAX_LENGTH = 200;
 
-module.exports = class ArrayView<T> extends View<void, Props<T>, State<T>> {
+module.exports = class ArrayView<T> extends React.Component<void, Props<T>, State<T>> {
+
+    state: State<T>;
 
     constructor(props: Props) {
         super(props);
@@ -16,22 +17,22 @@ module.exports = class ArrayView<T> extends View<void, Props<T>, State<T>> {
     }
 
     componentDidMount() {
-        const value = this.props.value;
-        const iterator = value.next ? value : value[Symbol.iterator]();
+        visitAsyncIterator(
+            this.props.value,
 
-        visitIterator(
-            iterator,
-            (iterator, index) => {
-                if (this.state.done || iterator.done || index >= MAX_LENGTH) {
-                    this.setState(_.extend(this.state, {done: true}));
-                    return true;
-                } else {
-                    this.setState(_.extend(this.state, {
-                        elements: this.state.elements.concat(iterator.value)
-                    }));
-                    return false;
-                }
+            // value callback
+            (value: T, index: number) => {
+                if (this.state.done || index >= MAX_LENGTH) return true;
+                this.setState(_.extend(this.state, {
+                    elements: this.state.elements.concat(value)
+                }));
+                return false;
             },
+
+            // done callback
+            () => this.setState(_.extend(this.state, {done: true})),
+
+            // error callback
             (error) => {
                 console.error(error);
                 this.setState(_.extend(this.state, {error}));
@@ -59,28 +60,29 @@ module.exports = class ArrayView<T> extends View<void, Props<T>, State<T>> {
 };
 
 type Props<T> = {
-    ElementView: typeof View;
-    value: Iterator<T> | AsyncIterator<T> | Iterable<T>;
+    ElementView: typeof React.Component;
+    value: AsyncIterator<T>;
 }
 
 type State<T> = {
     elements: Array<T>;
     done: boolean;
-    error: Error;
+    error?: Error;
 }
 
-function visitIterator(iterator, visitor, errorCallback, index = 0) {
-    const nextIterator = iterator.next();
-
-    if (nextIterator.then) {
-        nextIterator.then(inner, errorCallback);
-    } else {
-        inner(nextIterator);
-    }
-
-    function inner(iterator) {
-        if (!visitor(iterator, index) && !iterator.done) {
-            visitIterator(iterator, visitor, errorCallback, index + 1);
+function visitAsyncIterator<T>(
+        iterator: AsyncIterator<T>,
+        callback: (value: T, index: number) => boolean,
+        doneCallback: () => void,
+        errorCallback: (error: Error) => void,
+        index: number = 0
+) {
+    iterator.next().then((result: {value: T, done: boolean}) => {
+        const {value, done} = result;
+        if (!done && !callback(value, index)) {
+            visitAsyncIterator(iterator, callback, doneCallback, errorCallback, index);
+        } else {
+            doneCallback();
         }
-    }
+    }, errorCallback);
 }
