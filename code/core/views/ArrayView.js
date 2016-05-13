@@ -45,9 +45,9 @@ module.exports = class ArrayView<T> extends View<void, Props<T>, State<T>> {
 
     render() {
         return <div>
-            { this.renderElements() }
-            { this.state.done ? null : <LoadingView /> }
-            { this.state.error ? <ErrorView error={this.state.error} /> : null }
+            {this.renderElements()}
+            {this.state.done ? null : <LoadingView />}
+            {this.state.error ? <ErrorView error={this.state.error} /> : null}
         </div>;
     }
 

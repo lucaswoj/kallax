@@ -11,7 +11,7 @@ module.exports = class KallaxView extends View {
     render() {
         return <div className='KallaxView'>
             <MarkdownView
-                isMarkdownX={true}
+                isMarkdownX
                 value={FS.readFileSync(Path.join(__dirname, 'index.md'), 'utf8')}
             />
         </div>;
