@@ -16,8 +16,7 @@ module.exports = class MarkdownView extends React.Component<void, Props, void> {
 
     render() {
         if (this.props.enableX) {
-            const jsxSource = '<div>' + renderMarkdown(this.props.value) + '</div>';
-            const jsSource = Babel.transform(jsxSource, this.getBabelOptions()).code;
+            const jsSource = Babel.transform(this.props.value, this.getBabelOptions()).code;
             return vm.runInNewContext(jsSource, this.getContext());
 
         } else {
@@ -33,12 +32,13 @@ module.exports = class MarkdownView extends React.Component<void, Props, void> {
     }
 
     getContext() {
-        const React = require('react');
-        const GitHubIssueView = require('../../github/GitHubIssueView');
-        const ArrayView = require('./ArrayView');
-        const GitHubIssue = require('../../github/GitHubIssue');
-
-        return {React, ArrayView, GitHubIssue, GitHubIssueView};
+        return {
+            React: require('react'),
+            ArrayView: require('./ArrayView'),
+            SelectableArrayView: require('./SelectableArrayView'),
+            GitHubIssue: require('../../github/GitHubIssue'),
+            GitHubIssueView: require('../../github/GitHubIssueView')
+        };
     }
 
 };

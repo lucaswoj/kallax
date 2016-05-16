@@ -1,14 +1,21 @@
 @cadance: 17px;
+@cadance2: @cadance * 2;
+@cadance3: @cadance * 3;
 
-@light: #666;
-@medium: #444;
-@dark: #222;
+@gray1: #eee;
+@gray2: #ccc;
+@gray3: #aaa;
+@gray4: #888;
+@gray5: #666;
+@gray6: #444;
+@gray7: #222;
 
 body {
     font-family: Helvetica;
     font-size: 13px;
     line-height: (@cadance / 12px) * 100%;
-    color: @medium;
+    color: @gray6;
+    background-color: @gray4;
 }
 
 img {
@@ -16,11 +23,11 @@ img {
 }
 
 h2 {
-    font-size: @cadance * 2;
+    font-size: @cadance2;
     line-height: 110%;
     margin-bottom: @cadance;
     font-weight: bold;
-    color: @dark;
+    color: @gray7;
 }
 
 p {
@@ -29,20 +36,20 @@ p {
 
 .outline {
     border: 1px #eee solid;
-    padding: 2 * @cadance 3 * @cadance;
-    margin-bottom: 2 * @cadance;
+    padding: @cadance2 @cadance3;
+    margin-bottom: @cadance2;
     border-radius: 5px;
 }
 
 .KallaxView {
     max-width: 35 * @cadance;
     margin: 0 auto;
-    padding: 2 * @cadance;
+    padding: @cadance2;
 }
 
 .LoadingView {
-    width: @cadance * 2;
-    height: @cadance * 2;
+    width: @cadance2;
+    height: @cadance2;
     margin: 0 auto;
     background-color: #333;
     border-radius: 100%;
@@ -55,5 +62,13 @@ p {
     } 100% {
         transform: scale(1.0);
         opacity: 0;
+    }
+}
+
+.SelectableView {
+    background-color: @gray1;
+
+    &:hover {
+        background-color: @gray2;
     }
 }
