@@ -14,7 +14,7 @@ module.exports = class ArrayView<T> extends React.Component<void, Props<T>, Stat
 
     constructor(props: Props) {
         super(props);
-        this.state = {elements: [], done: false};
+        this.state = {subvalues: [], done: false};
     }
 
     componentDidMount() {
@@ -25,7 +25,7 @@ module.exports = class ArrayView<T> extends React.Component<void, Props<T>, Stat
             (value: T, index: number) => {
                 if (this.state.done || index >= MAX_LENGTH) return true;
                 this.setState(_.extend(this.state, {
-                    elements: this.state.elements.concat(value)
+                    subvalues: this.state.subvalues.concat(value)
                 }));
                 return false;
             },
@@ -47,8 +47,8 @@ module.exports = class ArrayView<T> extends React.Component<void, Props<T>, Stat
 
     render() {
         return <div>
-            {this.state.elements.map((element: T, index: number) =>
-                <div key={index}>{this.props.renderElement(element, index)}</div>
+            {this.state.subvalues.map((subvalue: T, index: number) =>
+                <div key={index}>{this.props.renderSubvalue(subvalue, index)}</div>
             )}
             {this.state.done ? null : <LoadingView />}
             {this.state.error ? <ErrorView error={this.state.error} /> : null}
@@ -57,12 +57,12 @@ module.exports = class ArrayView<T> extends React.Component<void, Props<T>, Stat
 };
 
 type Props<T> = {
-    renderElement: (element: T, index: number) => React.Element;
+    renderSubvalue: (subvalue: T, index: number) => React.Element;
     value: AsyncIterator<T>;
 }
 
 type State<T> = {
-    elements: Array<T>;
+    subvalues: Array<T>;
     done: boolean;
     error?: Error;
 }
