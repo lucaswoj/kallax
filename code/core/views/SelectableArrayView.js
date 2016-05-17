@@ -10,7 +10,7 @@ module.exports = class SelectableArrayView<T> extends React.Component<void, Prop
 
     render() {
 
-        return <ArrayView {...this.props} renderSubvalue={(subvalue: T, index: number) =>
+        return <ArrayView {...this.props} renderSubview={(subvalue: T, index: number) =>
             <SelectableView
                 ref={(subview) => { this.subviews[index] = subview; }}
                 onKey={{
@@ -18,13 +18,13 @@ module.exports = class SelectableArrayView<T> extends React.Component<void, Prop
                     'ArrowUp': () =>   this.subviews[index - 1] && this.subviews[index - 1].select()
                 }}
             >
-                {this.props.renderSubvalue(subvalue, index)}
+                {this.props.renderSubview(subvalue, index)}
             </SelectableView>
         } />;
     }
 };
 
 type Props<T> = {
-    renderSubvalue: (subvalue: T, index: number) => React.Element;
+    renderSubview: (subvalue: T, index: number) => React.Element;
     value: AsyncIterator<T>;
 }
