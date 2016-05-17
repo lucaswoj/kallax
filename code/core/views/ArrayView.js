@@ -5,7 +5,7 @@ const ErrorView = require('./ErrorView');
 const LoadingView = require('./LoadingView');
 const AsyncIteratorUtil = require('../util/AsyncIteratorUtil');
 
-const MAX_LENGTH = 200;
+const MAX_LENGTH = 20;
 
 module.exports = class ArrayView<T> extends React.Component<void, Props<T>, State<T>> {
 
