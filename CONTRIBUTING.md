@@ -1,7 +1,8 @@
 # Contributing
 
-### Software Arechitecture
+### Software Architecture
 
+* Prefer convention to configuration
 * Prefer interfaces to composition
 * Prefer composition to inheritance
 * Prever the simplest robust solution
