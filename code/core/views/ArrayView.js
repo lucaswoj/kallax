@@ -3,7 +3,6 @@
 const React = require('react');
 const ErrorView = require('./ErrorView');
 const LoadingView = require('./LoadingView');
-const _ = require('lodash');
 const AsyncIteratorUtil = require('../util/AsyncIteratorUtil');
 
 const MAX_LENGTH = 200;
@@ -24,25 +23,25 @@ module.exports = class ArrayView<T> extends React.Component<void, Props<T>, Stat
             // value callback
             (value: T, index: number) => {
                 if (this.state.done || index >= MAX_LENGTH) return true;
-                this.setState(_.extend(this.state, {
+                this.setState(Object.assign(this.state, {
                     subvalues: this.state.subvalues.concat(value)
                 }));
                 return false;
             },
 
             // done callback
-            () => this.setState(_.extend(this.state, {done: true})),
+            () => this.setState(Object.assign(this.state, {done: true})),
 
             // error callback
             (error: Error) => {
                 console.error(error);
-                this.setState(_.extend(this.state, {error}));
+                this.setState(Object.assign(this.state, {error}));
             }
         );
     }
 
     componentWillUnmount() {
-        this.setState(_.extend({done: true}, this.state));
+        this.setState(Object.assign(this.state, {done: true}));
     }
 
     render() {

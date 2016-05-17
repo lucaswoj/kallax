@@ -1,6 +1,5 @@
 // @flow
 
-const _ = require('lodash');
 const URL = require('url');
 
 class GitHubIssue {
@@ -69,7 +68,7 @@ function fetchIssuesPage(pageIndex, pathname, query) {
         protocol: 'https',
         hostname: 'api.github.com',
         pathname: pathname,
-        query: _.extend({
+        query: Object.assign({}, {
             access_token: process.env['GITHUB_ACCESS_TOKEN'],
             page: pageIndex,
             per_page: ISSUES_PER_PAGE
