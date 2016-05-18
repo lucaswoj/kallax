@@ -12,7 +12,7 @@ type Props = {
     enableX?: boolean;
 }
 
-module.exports = class MarkdownView extends React.Component<void, Props, void> {
+module.exports = class MarkdownComponent extends React.Component<void, Props, void> {
 
     render() {
         if (this.props.enableX) {
@@ -34,9 +34,9 @@ module.exports = class MarkdownView extends React.Component<void, Props, void> {
     getContext() {
         return {
             React: require('react'),
-            ArrayView: require('./ArrayView'),
+            ArrayComponent: require('./ArrayComponent'),
             GitHubIssue: require('../../github/GitHubIssue'),
-            GitHubIssueView: require('../../github/GitHubIssueView')
+            GitHubIssueComponent: require('../../github/GitHubIssueComponent')
         };
     }
 

@@ -1,13 +1,13 @@
 // @flow
 
 const React = require('react');
-const ErrorView = require('./ErrorView');
-const LoadingView = require('./LoadingView');
+const ErrorComponent = require('./ErrorComponent');
+const LoadingComponent = require('./LoadingComponent');
 const AsyncIteratorUtil = require('../util/AsyncIteratorUtil');
 
 const MAX_LENGTH = 20;
 
-module.exports = class ArrayView<T> extends React.Component<void, Props<T>, State<T>> {
+module.exports = class ArrayComponent<T> extends React.Component<void, Props<T>, State<T>> {
 
     state: State<T>;
     subelements: Array<React.Element> = [];
@@ -49,11 +49,11 @@ module.exports = class ArrayView<T> extends React.Component<void, Props<T>, Stat
         return <div>
             {this.state.subvalues.map((subvalue: T, index: number) =>
                 <div key={index} ref={index} onKeyDown={this.onSubelementKeyDown.bind(this, index)}>
-                    {this.props.renderSubview(subvalue, index)}
+                    {this.props.renderSubComponent(subvalue, index)}
                 </div>
             )}
-            {this.state.done ? null : <LoadingView />}
-            {this.state.error ? <ErrorView error={this.state.error} /> : null}
+            {this.state.done ? null : <LoadingComponent />}
+            {this.state.error ? <ErrorComponent error={this.state.error} /> : null}
         </div>;
     }
 
@@ -82,7 +82,7 @@ module.exports = class ArrayView<T> extends React.Component<void, Props<T>, Stat
 };
 
 type Props<T> = {
-    renderSubview: (subvalue: T, index: number) => React.Element;
+    renderSubComponent: (subvalue: T, index: number) => React.Element;
     value: AsyncIterator<T>;
 }
 

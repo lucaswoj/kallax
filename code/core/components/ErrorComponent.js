@@ -6,7 +6,7 @@ type Props = {
     error: Error;
 };
 
-module.exports = class ErrorView extends React.Component<void, Props, void> {
+module.exports = class ErrorComponent extends React.Component<void, Props, void> {
 
     render() {
         return <div>Error! {this.props.error}</div>;

@@ -14,6 +14,6 @@
 
 ### Stylesheets
 
- * Give every react component a CSS class name that's equal to its component name (i.e. `<FooView className='FooView' />`)
- * Give react components additional styles by adding additional lowercase class names (i.e. `<FooView className='FooView green' />`)
- * Prefer global class definitions (i.e. `.green {...}`) to scoped class definitions (i.e. `.FooView.green {...}`)
+ * Give every react component a CSS class name that's equal to its component name (i.e. `<FooComponent className='FooComponent' />`)
+ * Give react components additional styles by adding additional lowercase class names (i.e. `<FooComponent className='FooComponent green' />`)
+ * Prefer global class definitions (i.e. `.green {...}`) to scoped class definitions (i.e. `.FooComponent.green {...}`)

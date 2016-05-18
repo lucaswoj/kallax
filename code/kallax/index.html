@@ -12,14 +12,14 @@
     <script>
         var ReactDOM = require('react-dom');
         var React = require('react');
-        var KallaxView = require('./KallaxView');
+        var KallaxComponent = require('./KallaxComponent');
 
         // Due to an apparent bug in Electron, this initialization must be in
         // a `setTimeout` in order for the debugger to pause on exceptions and
         // breakpoints.
         setTimeout(() => {
             ReactDOM.render(
-                React.createElement(KallaxView),
+                React.createElement(KallaxComponent),
                 document.getElementById('kallax')
             );
         }, 0);
