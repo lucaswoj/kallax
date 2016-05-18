@@ -7,25 +7,24 @@ const AsyncIteratorUtil = require('../util/AsyncIteratorUtil');
 
 const MAX_LENGTH = 20;
 
-module.exports = class ArrayComponent<T> extends React.Component<void, Props<T>, State<T>> {
+module.exports = class ListComponent<T> extends React.Component<void, Props<T>, State<T>> {
 
     state: State<T>;
-    subelements: Array<React.Element> = [];
 
     constructor(props: Props) {
         super(props);
-        this.state = {subvalues: [], done: false};
+        this.state = {values: [], done: false};
     }
 
     componentDidMount() {
         AsyncIteratorUtil.each(
-            this.props.value,
+            this.props.values,
 
             // value callback
             (value: T, index: number) => {
                 if (this.state.done || index >= MAX_LENGTH) return true;
                 this.setState(Object.assign(this.state, {
-                    subvalues: this.state.subvalues.concat(value)
+                    values: this.state.values.concat(value)
                 }));
                 return false;
             },
@@ -47,9 +46,9 @@ module.exports = class ArrayComponent<T> extends React.Component<void, Props<T>,
 
     render() {
         return <div>
-            {this.state.subvalues.map((subvalue: T, index: number) =>
-                <div key={index} ref={index} onKeyDown={this.onSubelementKeyDown.bind(this, index)}>
-                    {this.props.renderSubComponent(subvalue, index)}
+            {this.state.values.map((value: T, index: number) =>
+                <div key={index} ref={index} onKeyDown={this.onKeyDown.bind(this, index)}>
+                    {this.props.renderValue(value, index)}
                 </div>
             )}
             {this.state.done ? null : <LoadingComponent />}
@@ -57,19 +56,15 @@ module.exports = class ArrayComponent<T> extends React.Component<void, Props<T>,
         </div>;
     }
 
-    getSubelement(index: number): React.Element {
-        return this.subelements[index];
-    }
-
-    onSubelementKeyDown(index: number, event: SyntheticKeyboardEvent) {
-        if (event.key === 'ArrowDown' && this.focusSubelement(index + 1)) {
+    onKeyDown(index: number, event: SyntheticKeyboardEvent) {
+        if (event.key === 'ArrowDown' && this.focus(index + 1)) {
             event.preventDefault();
-        } else if (event.key === 'ArrowUp' && this.focusSubelement(index - 1)) {
+        } else if (event.key === 'ArrowUp' && this.focus(index - 1)) {
             event.preventDefault();
         }
     }
 
-    focusSubelement(index: number): boolean {
+    focus(index: number): boolean {
         const element = this.refs[index];
         if (!element) return false;
 
@@ -82,12 +77,12 @@ module.exports = class ArrayComponent<T> extends React.Component<void, Props<T>,
 };
 
 type Props<T> = {
-    renderSubComponent: (subvalue: T, index: number) => React.Element;
-    value: AsyncIterator<T>;
+    renderValue: (row: T, index: number) => React.Element;
+    values: AsyncIterator<T>;
 }
 
 type State<T> = {
-    subvalues: Array<T>;
+    values: Array<T>;
     done: boolean;
     error?: Error;
 }

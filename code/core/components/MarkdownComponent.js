@@ -34,7 +34,7 @@ module.exports = class MarkdownComponent extends React.Component<void, Props, vo
     getContext() {
         return {
             React: require('react'),
-            ArrayComponent: require('./ArrayComponent'),
+            ListComponent: require('./ListComponent'),
             GitHubIssue: require('../../github/GitHubIssue'),
             GitHubIssueComponent: require('../../github/GitHubIssueComponent')
         };
