@@ -68,9 +68,6 @@ module.exports = class ListComponent<T> extends React.Component<void, Props<T>, 
         const element = this.refs[index];
         if (!element) return false;
 
-        const focusableElement = element.querySelector('[tabindex]');
-        if (!focusableElement) return false;
-
         element.querySelector('[tabindex]').focus();
         return true;
     }
