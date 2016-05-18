@@ -3,7 +3,7 @@
 const React = require('react');
 const ErrorComponent = require('./ErrorComponent');
 const LoadingComponent = require('./LoadingComponent');
-const AsyncIteratorUtil = require('../util/AsyncIteratorUtil');
+const eachAsyncIterator = require('../util/eachAsyncIterator');
 
 const MAX_LENGTH = 20;
 
@@ -17,7 +17,7 @@ module.exports = class ListComponent<T> extends React.Component<void, Props<T>, 
     }
 
     componentDidMount() {
-        AsyncIteratorUtil.each(
+        eachAsyncIterator(
             this.props.values,
 
             // value callback
