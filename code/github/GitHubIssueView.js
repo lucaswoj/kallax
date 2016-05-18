@@ -11,7 +11,7 @@ type Props = {
 module.exports = class GitHubIssueView extends React.Component<void, Props, void> {
 
     render() {
-        return <div className="GitHubIssueView callout">
+        return <div tabIndex={-1} className="GitHubIssueView callout">
             <h2>{this.props.value.title}</h2>
             <MarkdownView value={this.props.value.body} />
         </div>;

@@ -2,25 +2,34 @@
 
 const React = require('react');
 const ArrayView = require('./ArrayView');
-const SelectableView = require('./SelectableView');
 
 module.exports = class SelectableArrayView<T> extends React.Component<void, Props<T>, void> {
 
-    subviews: {[index: number]: SelectableView} = {};
-
     render() {
-
-        return <ArrayView {...this.props} renderSubview={(subvalue: T, index: number) =>
-            <SelectableView
-                ref={(subview) => { this.subviews[index] = subview; }}
-                onKey={{
-                    'ArrowDown': () => this.subviews[index + 1] && this.subviews[index + 1].select(),
-                    'ArrowUp': () =>   this.subviews[index - 1] && this.subviews[index - 1].select()
-                }}
-            >
+        return <ArrayView ref='element' value={this.props.value} renderSubview={(subvalue: T, index: number) => {
+            return <div onKeyDown={this.onSubviewKeyDown.bind(this, index)}>
                 {this.props.renderSubview(subvalue, index)}
-            </SelectableView>
-        } />;
+            </div>;
+        }} />;
+    }
+
+    onSubviewKeyDown(index: number, event: SyntheticKeyboardEvent) {
+        if (event.key === 'ArrowDown' && this.focus(index + 1)) {
+            event.preventDefault();
+        } else if (event.key === 'ArrowUp' && this.focus(index - 1)) {
+            event.preventDefault();
+        }
+    }
+
+    focus(index: number): boolean {
+        const element = this.refs.element.getSubelement(index);
+        if (!element) return false;
+
+        const focusableElement = element.querySelector('[tabindex]');
+        if (!focusableElement) return false;
+
+        element.querySelector('[tabindex]').focus();
+        return true;
     }
 };
 
