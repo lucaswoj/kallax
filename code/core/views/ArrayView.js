@@ -48,7 +48,7 @@ module.exports = class ArrayView<T> extends React.Component<void, Props<T>, Stat
     render() {
         return <div>
             {this.state.subvalues.map((subvalue: T, index: number) =>
-                <div key={index} ref={(subelement) => { this.subelements[index] = subelement; }} >
+                <div key={index} ref={index} onKeyDown={this.onSubelementKeyDown.bind(this, index)}>
                     {this.props.renderSubview(subvalue, index)}
                 </div>
             )}
@@ -59,6 +59,25 @@ module.exports = class ArrayView<T> extends React.Component<void, Props<T>, Stat
 
     getSubelement(index: number): React.Element {
         return this.subelements[index];
+    }
+
+    onSubelementKeyDown(index: number, event: SyntheticKeyboardEvent) {
+        if (event.key === 'ArrowDown' && this.focusSubelement(index + 1)) {
+            event.preventDefault();
+        } else if (event.key === 'ArrowUp' && this.focusSubelement(index - 1)) {
+            event.preventDefault();
+        }
+    }
+
+    focusSubelement(index: number): boolean {
+        const element = this.refs[index];
+        if (!element) return false;
+
+        const focusableElement = element.querySelector('[tabindex]');
+        if (!focusableElement) return false;
+
+        element.querySelector('[tabindex]').focus();
+        return true;
     }
 };
 
