@@ -57,9 +57,11 @@ module.exports = class ListView<T> extends React.Component<void, Props<T>, State
     }
 
     onKeyDown(index: number, event: SyntheticKeyboardEvent) {
-        if (event.key === 'ArrowDown' && this.focus(index + 1)) {
+        if (event.key === 'ArrowDown') {
+            this.focus(index + 1);
             event.preventDefault();
-        } else if (event.key === 'ArrowUp' && this.focus(index - 1)) {
+        } else if (event.key === 'ArrowUp') {
+            this.focus(index - 1);
             event.preventDefault();
         }
     }
@@ -68,7 +70,9 @@ module.exports = class ListView<T> extends React.Component<void, Props<T>, State
         const element = this.refs[index];
         if (!element) return false;
 
-        element.querySelector('[tabindex]').focus();
+        const focusableElement = element.querySelector('[tabindex]');
+        focusableElement.focus();
+        focusableElement.scrollIntoView();
         return true;
     }
 };
