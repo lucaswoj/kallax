@@ -7,12 +7,14 @@ const Babel = require('babel-core');
 const vm = require('vm');
 const Path = require('path');
 
-type Props = {
-    value: string;
-    enableX?: boolean;
-}
+module.exports = class MarkdownComponent extends React.Component {
 
-module.exports = class MarkdownComponent extends React.Component<void, Props, void> {
+    props: {
+        value: string;
+        enableX?: boolean;
+    };
+
+    state: void;
 
     render() {
         if (this.props.enableX) {
