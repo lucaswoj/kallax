@@ -2,7 +2,7 @@
 
 const React = require('react');
 
-module.exports = class ErrorComponent extends React.Component {
+module.exports = class ErrorView extends React.Component {
 
     props: {
         error: Error;

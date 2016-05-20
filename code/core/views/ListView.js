@@ -1,13 +1,13 @@
 // @flow
 
 const React = require('react');
-const ErrorComponent = require('./ErrorComponent');
-const LoadingComponent = require('./LoadingComponent');
+const ErrorView = require('./ErrorView');
+const LoadingView = require('./LoadingView');
 const eachAsyncIterator = require('../util/eachAsyncIterator');
 
 const MAX_LENGTH = 20;
 
-module.exports = class ListComponent<T> extends React.Component<void, Props<T>, State<T>> {
+module.exports = class ListView<T> extends React.Component<void, Props<T>, State<T>> {
 
     state: State<T>;
 
@@ -51,8 +51,8 @@ module.exports = class ListComponent<T> extends React.Component<void, Props<T>, 
                     {this.props.renderValue(value, index)}
                 </div>
             )}
-            {this.state.done ? null : <LoadingComponent />}
-            {this.state.error ? <ErrorComponent error={this.state.error} /> : null}
+            {this.state.done ? null : <LoadingView />}
+            {this.state.error ? <ErrorView error={this.state.error} /> : null}
         </div>;
     }
 

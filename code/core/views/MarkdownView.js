@@ -7,7 +7,7 @@ const Babel = require('babel-core');
 const vm = require('vm');
 const Path = require('path');
 
-module.exports = class MarkdownComponent extends React.Component {
+module.exports = class MarkdownView extends React.Component {
 
     props: {
         value: string;
@@ -36,9 +36,9 @@ module.exports = class MarkdownComponent extends React.Component {
     getContext() {
         return {
             React: require('react'),
-            ListComponent: require('./ListComponent'),
+            ListView: require('./ListView'),
             GitHubIssue: require('../../github/GitHubIssue'),
-            GitHubIssueComponent: require('../../github/GitHubIssueComponent')
+            GitHubIssueView: require('../../github/GitHubIssueView')
         };
     }
 
