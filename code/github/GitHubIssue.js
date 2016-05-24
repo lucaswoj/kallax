@@ -1,8 +1,9 @@
 // @flow
 
 const URL = require('url');
+const {EventEmitter} = require('events');
 
-class GitHubIssue {
+class GitHubIssue extends EventEmitter {
 
     title: string;
     body: string;
@@ -17,6 +18,7 @@ class GitHubIssue {
     }
 
     constructor(options: Serialized) {
+        super();
         this.title = options.title;
         this.body = options.body;
         this.id = options.id;
@@ -27,6 +29,7 @@ class GitHubIssue {
     }
 
     set isRead(value: boolean) {
+        this.emit('change');
         localStorage.setItem(this.localStorageKey, JSON.stringify(value));
     }
 
