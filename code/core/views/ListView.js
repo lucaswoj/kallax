@@ -3,9 +3,7 @@
 const React = require('react');
 const ErrorView = require('./ErrorView');
 const LoadingView = require('./LoadingView');
-const eachAsyncIterator = require('../util/eachAsyncIterator');
-
-const MAX_LENGTH = 20;
+const AsyncArray = require('../util/AsyncArray');
 
 module.exports = class ListView<T> extends React.Component<void, Props<T>, State<T>> {
 
@@ -17,27 +15,18 @@ module.exports = class ListView<T> extends React.Component<void, Props<T>, State
     }
 
     componentDidMount() {
-        eachAsyncIterator(
-            this.props.values,
-
-            // value callback
-            (value: T, index: number) => {
-                if (this.state.done || index >= MAX_LENGTH) return true;
-                this.setState(Object.assign(this.state, {
-                    values: this.state.values.concat(value)
-                }));
-                return false;
-            },
-
-            // done callback
-            () => this.setState(Object.assign(this.state, {done: true})),
-
-            // error callback
-            (error: Error) => {
+        this.props.values.fetch(20, (error: Error, values: Array<T>, done: boolean) => {
+            if (error) {
                 console.error(error.stack);
                 this.setState(Object.assign(this.state, {error}));
             }
-        );
+
+            this.setState(Object.assign(this.state, {values: values}));
+
+            if (done || this.state.done) {
+                this.setState(Object.assign(this.state, {done: true}));
+            }
+        });
     }
 
     componentWillUnmount() {
@@ -79,7 +68,7 @@ module.exports = class ListView<T> extends React.Component<void, Props<T>, State
 
 type Props<T> = {
     renderValue: (row: T, index: number) => React.Element;
-    values: AsyncIterator<T>;
+    values: AsyncArray<T>;
 }
 
 type State<T> = {

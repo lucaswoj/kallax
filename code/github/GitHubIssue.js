@@ -2,6 +2,7 @@
 
 const URL = require('url');
 const {EventEmitter} = require('events');
+const AsyncArray = require('../core/util/AsyncArray');
 
 class GitHubIssue extends EventEmitter {
 
@@ -13,7 +14,7 @@ class GitHubIssue extends EventEmitter {
             query: string,
             sort: "comments" | "created" | "updated",
             order: "asc" | "desc"
-    ): AsyncIterator<GitHubIssue> {
+    ): AsyncArray<GitHubIssue> {
         return fetchIssues('search/issues', {q: query, sort: sort, order: order});
     }
 
@@ -47,39 +48,21 @@ type Serialized = {
     id: number;
 }
 
-function fetchIssues(pathname, query): AsyncIterator<GitHubIssue> {
-    const pages = [];
+const ISSUES_PER_PAGE = 100;
 
-    function fetchIssue(index, pathname, query) {
+function fetchIssues(pathname, query): AsyncArray<GitHubIssue> {
+    const pages = [fetchIssuesPage(0, pathname, query)];
+
+    const getPromise = (index): Promise<GitHubIssue> => {
         const pageIndex = Math.floor(index / ISSUES_PER_PAGE);
         pages[pageIndex] = pages[pageIndex] || fetchIssuesPage(pageIndex, pathname, query);
-
-        return pages[pageIndex].then((page) => {
-            if (index < page.total_count) {
-                return {
-                    value: new GitHubIssue(page.items[index % ISSUES_PER_PAGE]),
-                    done: false
-                };
-
-            } else {
-                return {
-                    value: null,
-                    done: true
-                };
-            }
-        });
-    }
-
-    let index = 0;
-    return {
-        next: () => fetchIssue(index++, pathname, query),
-        done: false,
-        value: null
+        return pages[pageIndex].then((page): any => new GitHubIssue(page.items[index % ISSUES_PER_PAGE]));
     };
 
-}
+    const lengthPromise = pages[0].then((page) => page.total_count);
 
-const ISSUES_PER_PAGE = 100;
+    return new AsyncArray(getPromise, lengthPromise);
+}
 
 function fetchIssuesPage(pageIndex, pathname, query) {
     const url = URL.format({
