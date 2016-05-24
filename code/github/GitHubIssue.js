@@ -6,6 +6,7 @@ class GitHubIssue {
 
     title: string;
     body: string;
+    id: number;
 
     static search(
             query: string,
@@ -18,6 +19,19 @@ class GitHubIssue {
     constructor(options: Serialized) {
         this.title = options.title;
         this.body = options.body;
+        this.id = options.id;
+    }
+
+    get isRead(): boolean {
+        return JSON.parse(localStorage.getItem(this.localStorageKey) || 'false');
+    }
+
+    set isRead(value: boolean) {
+        localStorage.setItem(this.localStorageKey, JSON.stringify(value));
+    }
+
+    get localStorageKey(): string {
+        return JSON.stringify(['kallax', 'GitHubIssue', this.id]);
     }
 
 }
@@ -27,6 +41,7 @@ module.exports = GitHubIssue;
 type Serialized = {
     title: string;
     body: string;
+    id: number;
 }
 
 function fetchIssues(pathname, query): AsyncIterator<GitHubIssue> {
