@@ -34,7 +34,7 @@ module.exports = class ListView<T> extends React.Component<void, Props<T>, State
 
             // error callback
             (error: Error) => {
-                console.error(error);
+                console.error(error.stack);
                 this.setState(Object.assign(this.state, {error}));
             }
         );

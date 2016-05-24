@@ -11,7 +11,7 @@ module.exports = class ErrorView extends React.Component {
     state: void;
 
     render() {
-        return <div>Error! {this.props.error}</div>;
+        return <pre>{this.props.error.stack}</pre>;
     }
 
 };
