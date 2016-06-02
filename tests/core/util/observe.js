@@ -1,43 +1,45 @@
-const assert = require('assert');
-const tap = require('tap');
 const observe = require('../../../code/core/util/observe');
+const assert = require('assert');
 
-tap.test('createObervable', (tap) => {
+describe('createObervable', () => {
 
-    tap.test('should observe property changes', (tap) => {
+    it('should observe property changes', () => {
 
         const object = observe(
             {foo: 'bar'},
             (key) => {
-                tap.equal(key, 'foo');
-                tap.equal(object.foo, 'baz');
-                tap.end();
+                assert.equal(key, 'foo');
+                assert.equal(object.foo, 'baz');
+
             }
         );
 
         object.foo = 'baz';
     });
 
-    tap.test('should observe prototype property changes', (tap) => {
+    it('should observe prototype property changes', () => {
 
         const object = observe(
             Object.create({foo: 'bar'}),
             (key) => {
-                tap.equal(key, 'foo');
-                tap.equal(object.foo, 'baz');
-                tap.end();
+                assert.equal(key, 'foo');
+                assert.equal(object.foo, 'baz');
+
             }
         );
 
         object.foo = 'baz';
     });
 
-    tap.test('should maintain instanceof compatability', (tap) => {
+    it('should maintain instanceof compatability', () => {
         class Klass {}
         const object = observe(new Klass());
         assert(object instanceof Klass);
-        tap.end();
+
     });
 
-    tap.end();
+});
+
+describe('async', (callback) => {
+    setTimeout(callback, 1000);
 });
