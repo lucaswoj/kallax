@@ -1,27 +1,20 @@
-module.exports = function<T> (input: {}, callback: (key: string) => void): T {
+module.exports = function<T> (input: T, callback: (key: string, value: any) => void): T {
 
-    const output = {};
-
-    for (const key in input) {
-        const descriptor = getPropertyDescriptor(input, key);
-
-        if (descriptor.writable) {
-            output[key] = {
-                set: (value) => {
-                    input[key] = value;
-                    callback(key);
-                    return value;
-                },
-                get: () => input[key],
-                configurable: descriptor.configurable,
-                enumerable: descriptor.enumerable
-            };
+    return new Proxy(input, {
+        set: function (object, key, value) {
+            object[key] = value;
+            if (!isSetter(object, key)) {
+                callback(key, value);
+            }
+            return true;
         }
-    }
-
-    return Object.create(input, output);
+    });
 
 };
+
+function isSetter(object, key) {
+    return getPropertyDescriptor(object, key).set;
+}
 
 function getPropertyDescriptor(object, key) {
     while (true) {

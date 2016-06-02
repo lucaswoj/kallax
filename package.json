@@ -1,14 +1,14 @@
 {
   "name": "kallax",
   "engines": {
-    "node": ">= 5.10.0"
+    "node": ">= 6.2.0"
   },
   "version": "1.0.0",
   "description": "",
   "main": "code/kallax/index.js",
   "scripts": {
     "test": "eslint --fix code tests && flow && babel-tap tests/**/*.js",
-    "test-unit": "babel-tap tests/**/*.js",
+    "test-unit": "babel-tap --node-arg=--harmony tests/**/*.js",
     "start": "electron ."
   },
   "author": "",
