@@ -1,10 +1,14 @@
 {
   "name": "kallax",
+  "engines": {
+    "node": ">= 5.10.0"
+  },
   "version": "1.0.0",
   "description": "",
   "main": "code/kallax/index.js",
   "scripts": {
-    "test": "eslint --fix code && flow",
+    "test": "eslint --fix code tests && flow && babel-tap tests/**/*.js",
+    "test-unit": "babel-tap tests/**/*.js",
     "start": "electron ."
   },
   "author": "",
@@ -20,6 +24,7 @@
     "babel-preset-react": "^6.5.0",
     "babel-preset-stage-0": "^6.5.0",
     "babel-runtime": "^6.6.1",
+    "babel-tap": "^5.0.0",
     "electron-compile": "^3.1.0",
     "electron-compilers": "^3.0.0",
     "electron-prebuilt-compile": "^0.37.8",
@@ -31,6 +36,7 @@
     "flow-bin": "^0.24.1",
     "marked": "^0.3.5",
     "react": "^15.0.1",
-    "react-dom": "^15.0.1"
+    "react-dom": "^15.0.1",
+    "tap": "^5.7.2"
   }
 }
