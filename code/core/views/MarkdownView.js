@@ -36,7 +36,7 @@ module.exports = class MarkdownView extends React.Component {
     getContext() {
         return {
             React: require('react'),
-            ListView: require('./ListView'),
+            ArrayView: require('./ArrayView'),
             GitHubIssue: require('../../github/GitHubIssue'),
             GitHubIssueView: require('../../github/GitHubIssueView')
         };

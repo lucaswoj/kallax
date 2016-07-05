@@ -5,7 +5,7 @@ const ErrorView = require('./ErrorView');
 const LoadingView = require('./LoadingView');
 const AsyncArray = require('../util/AsyncArray');
 
-module.exports = class ListView<T> extends React.Component<void, Props<T>, State<T>> {
+module.exports = class ArrayView<T> extends React.Component<void, Props<T>, State<T>> {
 
     state: State<T>;
 
@@ -15,17 +15,12 @@ module.exports = class ListView<T> extends React.Component<void, Props<T>, State
     }
 
     componentDidMount() {
-        this.props.values.fetch(20, (error: Error, values: Array<T>, done: boolean) => {
+        this.props.values.fetchValues(0, 20, (error, values) => {
             if (error) {
-                console.error(error.stack);
                 this.setState(Object.assign(this.state, {error}));
             }
 
-            this.setState(Object.assign(this.state, {values: values}));
-
-            if (done || this.state.done) {
-                this.setState(Object.assign(this.state, {done: true}));
-            }
+            this.setState(Object.assign(this.state, {done: true, values: values}));
         });
     }
 

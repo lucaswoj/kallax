@@ -51,17 +51,16 @@ type Serialized = {
 const ISSUES_PER_PAGE = 100;
 
 function fetchIssues(pathname, query): AsyncArray<GitHubIssue> {
-    const pages = [fetchIssuesPage(0, pathname, query)];
-
-    const getPromise = (index): Promise<GitHubIssue> => {
-        const pageIndex = Math.floor(index / ISSUES_PER_PAGE);
-        pages[pageIndex] = pages[pageIndex] || fetchIssuesPage(pageIndex, pathname, query);
-        return pages[pageIndex].then((page): any => new GitHubIssue(page.items[index % ISSUES_PER_PAGE]));
-    };
-
-    const lengthPromise = pages[0].then((page) => page.total_count);
-
-    return new AsyncArray(getPromise, lengthPromise);
+    return new AsyncArray((callback) => {
+        const pages = [fetchIssuesPage(0, pathname, query)];
+        callback(null, (index, callback) => {
+            const pageIndex = Math.floor(index / ISSUES_PER_PAGE);
+            pages[pageIndex] = pages[pageIndex] || fetchIssuesPage(pageIndex, pathname, query);
+            pages[pageIndex].then((page) => {
+                callback(null, new GitHubIssue(page.items[index % ISSUES_PER_PAGE]));
+            }, (error: Error) => callback(error, (null: any)));
+        });
+    });
 }
 
 function fetchIssuesPage(pageIndex, pathname, query) {

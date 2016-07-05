@@ -4,12 +4,13 @@
   "description": "",
   "main": "code/kallax/index.js",
   "scripts": {
-    "test": "eslint --fix code tests && flow && electron-mocha tests/**/*.js",
+    "test": "echo eslint&& eslint --fix code tests && echo flow && flow && echo mocha && electron-mocha tests/**/*.js",
     "start": "electron ."
   },
   "author": "",
   "license": "ISC",
   "dependencies": {
+    "async": "^2.0.0-rc.6",
     "babel-core": "^6.8.0",
     "babel-eslint": "^6.0.4",
     "babel-plugin-check-es2015-constants": "^6.8.0",
@@ -27,7 +28,7 @@
     "eslint": "^2.9.0",
     "eslint-config-mourner": "^2.0.1",
     "eslint-plugin-flow-vars": "^0.4.0",
-    "eslint-plugin-flowtype": "^2.2.7",
+    "eslint-plugin-flowtype": "^2.3.0",
     "eslint-plugin-react": "^5.0.1",
     "flow-bin": "^0.24.1",
     "marked": "^0.3.5",
