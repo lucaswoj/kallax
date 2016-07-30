@@ -8,15 +8,14 @@
 </head>
 <body>
 
-    <div id="kallax" />
+    <div id="kallax"></div>
     <script>
-        var ReactDOM = require('react-dom');
-        var React = require('react');
-        var KallaxView = require('./KallaxView');
+        const ReactDOM = require('react-dom');
+        const React = require('react');
+        const KallaxView = require('./KallaxView');
 
-        // Due to an apparent bug in Electron, this initialization must be in
-        // a `setTimeout` in order for the debugger to pause on exceptions and
-        // breakpoints.
+        // This initialization must be in a `setTimeout` in order for the
+        // debugger to be able to pause on exceptions and breakpoints.
         setTimeout(() => {
             ReactDOM.render(
                 React.createElement(KallaxView),
