@@ -1,42 +1,67 @@
 html {
     font-family: -apple-system, BlinkMacSystemFont, sans-serif;
     font-size: 12px;
-    line-height: 130%;
 }
 
 html, body, #kallax {
     height: 100%;
 }
 
-.KallaxSidebarView {
+.KallaxView {
     height: 100%;
-    background-color: #f6f6f6;
-    position: relative;
-    min-width: 100px;
-    max-width: 75%;
-    padding: 0 18px;
-    box-sizing: border-box;
-    overflow: hidden;
-    color: #444444;
-    border-right: 1px solid #dfdfdf;
+    line-height: 150%;
 
-    h2 {
-        font-size: 17px;
-        margin: 20px 0 10px;
-        text-transform: uppercase;
-        color: #aaa;
-    }
-
-    li {
-        margin-bottom: 7px;
-        margin-left: 7px;
-    }
-
-    .resize-handle {
-        width: 10px;
+    .sidebar {
         height: 100%;
-        cursor: ew-resize;
-        position: absolute;
-        right: 0;
+        background-color: #f6f6f6;
+        position: relative;
+        min-width: 100px;
+        max-width: 75%;
+        padding: 0 18px;
+        box-sizing: border-box;
+        overflow: hidden;
+        color: #444444;
+        border-right: 1px solid #dfdfdf;
+        float: left;
+        -webkit-user-select: none;
+
+        h2 {
+            font-size: 17px;
+            margin: 15px 0 10px;
+            text-transform: uppercase;
+            color: #aaa;
+        }
+
+        li {
+            margin-left: 7px;
+            display: block;
+            cursor: pointer;
+
+            &.active {
+                font-weight: bold;
+            }
+        }
+
+        .resize-handle {
+            width: 10px;
+            height: 100%;
+            cursor: ew-resize;
+            position: absolute;
+            right: 0;
+        }
+    }
+
+    .active-page {
+        overflow: auto;
+        margin: 0 auto;
+        max-width: 800px;
+        padding: 49px;
+
+        h1 {
+            font-size: 49px;
+            margin-bottom: 10px;
+            text-transform: uppercase;
+            color: #aaa;
+        }
     }
 }
