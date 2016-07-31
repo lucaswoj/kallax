@@ -1,9 +1,36 @@
+html {
+    font-family: -apple-system, BlinkMacSystemFont, sans-serif;
+    font-size: 12px;
+    line-height: 130%;
+}
+
+html, body, #kallax {
+    height: 100%;
+}
+
 .KallaxSidebarView {
     height: 100%;
-    background-color: #eee;
+    background-color: #f6f6f6;
     position: relative;
     min-width: 100px;
     max-width: 75%;
+    padding: 0 18px;
+    box-sizing: border-box;
+    overflow: hidden;
+    color: #444444;
+    border-right: 1px solid #dfdfdf;
+
+    h2 {
+        font-size: 17px;
+        margin: 20px 0 10px;
+        text-transform: uppercase;
+        color: #aaa;
+    }
+
+    li {
+        margin-bottom: 7px;
+        margin-left: 7px;
+    }
 
     .resize-handle {
         width: 10px;
@@ -12,8 +39,4 @@
         position: absolute;
         right: 0;
     }
-}
-
-html, body, #kallax {
-    height: 100%;
 }
