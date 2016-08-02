@@ -37,6 +37,7 @@
         "global-require": "off",
         "indent": "error",
         "no-const-assign": "error",
+        "no-eq-null": "off",
         "no-use-before-define": "off",
         "no-var": "error",
         "object-curly-spacing": "error",

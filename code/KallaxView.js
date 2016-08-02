@@ -50,7 +50,7 @@ module.exports = class KallaxView extends React.Component {
     }
 
     renderActivePage() {
-        return <div className="active-page">
+        return <div className="active-page" style={{marginLeft: this.state.sidebarWidth}}>
             <MarkdownView value={this.state.activePage.body} />
         </div>;
     }

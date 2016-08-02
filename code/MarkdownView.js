@@ -22,10 +22,18 @@ module.exports = class MarkdownView extends React.Component {
     }
 
     render() {
-        return vm.runInNewContext(
-            Babel.transform(`<div>${renderMarkdown(this.props.value)}</div>`, babelOptions).code,
-            {React: React}
+        return vm.runInThisContext(
+            Babel.transform(`
+                const React = require('react');
+                const GithubNotification = require('${Path.join(__dirname, 'GithubNotification')}');
+                const PromiseView = require('${Path.join(__dirname, 'PromiseView')}');
+                <div>${unescape(renderMarkdown(this.props.value))}</div>
+            `, babelOptions).code
         );
     }
 
 };
+
+function unescape(string) {
+    return string.replace(/&gt;/g, '>');
+}
