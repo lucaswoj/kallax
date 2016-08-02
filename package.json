@@ -11,7 +11,7 @@
   "license": "ISC",
   "dependencies": {
     "async": "^2.0.0-rc.6",
-    "babel-core": "^6.8.0",
+    "babel-core": "^6.11.4",
     "babel-eslint": "^6.0.4",
     "babel-plugin-check-es2015-constants": "^6.8.0",
     "babel-plugin-transform-class-properties": "^6.11.5",

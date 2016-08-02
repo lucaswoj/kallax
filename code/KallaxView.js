@@ -2,6 +2,7 @@
 
 const React = require('react');
 const KallaxPage = require('./KallaxPage');
+const MarkdownView = require('./MarkdownView');
 
 module.exports = class KallaxView extends React.Component {
 
@@ -49,7 +50,9 @@ module.exports = class KallaxView extends React.Component {
     }
 
     renderActivePage() {
-        return <div className="active-page">{this.state.activePage.body}</div>;
+        return <div className="active-page">
+            <MarkdownView value={this.state.activePage.body} />
+        </div>;
     }
 
 };
