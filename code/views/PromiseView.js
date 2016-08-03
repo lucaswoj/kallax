@@ -4,7 +4,7 @@ const React = require('react');
 
 type Props<T> = {
     value: T | Promise<T>;
-    renderResolved: (value: T) => React.Element;
+    render: (value: T) => React.Element;
 }
 
 type State<T> = {
@@ -35,7 +35,7 @@ module.exports = class PromiseView<T> extends React.Component<void, Props<T>, St
 
     render() {
         if (this.state.state === 'resolved' && this.state.value != null) {
-            return this.props.renderResolved(this.state.value);
+            return this.props.render(this.state.value);
 
         } else if (this.state.state === 'loading') {
             return <div className="loading">Loading</div>;

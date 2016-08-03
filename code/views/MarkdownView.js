@@ -8,7 +8,7 @@ const vm = require('vm');
 const Path = require('path');
 
 const babelOptions = JSON.parse(
-    FS.readFileSync(Path.join(__dirname, '../.babelrc'), 'utf8')
+    FS.readFileSync(Path.join(__dirname, '../../.babelrc'), 'utf8')
 );
 
 module.exports = class MarkdownView extends React.Component {
@@ -25,8 +25,8 @@ module.exports = class MarkdownView extends React.Component {
         return vm.runInThisContext(
             Babel.transform(`
                 const React = require('react');
-                const GithubNotification = require('${Path.join(__dirname, 'GithubNotification')}');
-                const PromiseView = require('${Path.join(__dirname, 'PromiseView')}');
+                const GithubNotification = require('${Path.join(__dirname, '../models/GithubNotification')}');
+                const PromiseView = require('${Path.join(__dirname, './PromiseView')}');
                 <div>${unescape(renderMarkdown(this.props.value))}</div>
             `, babelOptions).code
         );

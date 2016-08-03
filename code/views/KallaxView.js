@@ -1,7 +1,7 @@
 // @flow
 
 const React = require('react');
-const KallaxPage = require('./KallaxPage');
+const KallaxPage = require('../models/KallaxPage');
 const MarkdownView = require('./MarkdownView');
 
 module.exports = class KallaxView extends React.Component {
