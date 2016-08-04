@@ -15,18 +15,32 @@ class ModelArray<T> extends EventEmitter {
         this.refresh = () => {
             const {fetch, length} = refresh();
             this.fetch = fetch;
-            this.length = length;
+            Object.defineProperty(this, 'length', {value: length});
         };
 
-        this.refresh();
+        // Create a lazy "fetch" method
+        this.fetch = (index: number) => {
+            this.refresh();
+            return this.fetch(index);
+        };
+
+        // Create a lazy "length" property
+        Object.defineProperty(this, 'length', {
+            configurable: true,
+            get: () => {
+                this.refresh();
+                return this.length;
+            }
+        });
     }
 
-    fetchSlice(startIndex: number, endIndex: number): Promise<Array<T>> {
+    fetchRange(startIndex: number, endIndex: number): Promise<Array<T>> {
         return Promise.all(_.range(startIndex, endIndex).map((index) => this.fetch(index)));
     }
 
     fetchAll(): Promise<Array<T>> {
-        return this.length.then((length) => this.fetchSlice(0, length));
+        if (!this.length) this.refresh();
+        return this.length.then((length) => this.fetchRange(0, length));
     }
 
 }
