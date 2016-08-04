@@ -4,8 +4,6 @@ const {app} = require('electron').remote;
 const Path = require('path');
 const FS = require('fs');
 
-// TODO make a subclass of Model
-
 const pagesDir = Path.join(app.getAppPath(), 'data');
 
 module.exports = class KallaxPage {

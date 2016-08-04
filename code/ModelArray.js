@@ -1,8 +1,5 @@
 // @flow
 
-// TODO rename all methods that return promises to begin with fetch
-// TODO add "then" methods
-
 const {EventEmitter} = require('events');
 const _ = require('lodash');
 

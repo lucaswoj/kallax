@@ -40,6 +40,7 @@
         "no-eq-null": "off",
         "no-use-before-define": "off",
         "no-var": "error",
+        "no-todo-comment": "error",
         "object-curly-spacing": "error",
         "prefer-arrow-callback": "error",
         "prefer-const": "error",
