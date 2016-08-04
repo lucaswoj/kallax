@@ -24,7 +24,7 @@ app.on('ready', () => {
     mainWindow = new BrowserWindow({width: 1500, height: 1000});
 
     // and load the index.html of the app.
-    mainWindow.loadURL(`file://${__dirname}/kallax.html`);
+    mainWindow.loadURL(`file://${__dirname}/index.html`);
 
     mainWindow.openDevTools();
 
