@@ -1,3 +1,5 @@
+// @flow
+
 type Support = {
   enumErrorProps: bool,
   enumPrototypes: bool,
@@ -31,7 +33,7 @@ type ThrottleOptions = {
   trailing?: bool,
 };
 
-type RecursiveArray<T>= Array<T|Array<T>>;
+type RecursiveArray<T> = Array<T|Array<T>>;
 type NestedArray<T> = Array<Array<T>>;
 
 type OPredicate = ((value: any, key: string, object: any) => bool)|Object|string;
@@ -45,7 +47,7 @@ type Iteratee2<T, U> = ((item: T, index: number, array: ?Array<T>) => U)|Object|
 type Comparator<T> = (arr: Array<T>, arr2: Array<T>) => bool;
 
 declare module 'lodash' {
-  declare class Lodash {
+    declare class Lodash {
     (value: any): any;
 
     // Array
@@ -229,9 +231,9 @@ declare module 'lodash' {
     now(): number;
 
     // Function
-    after(n: number, function: Function): Function;
+    after(n: number, fn: Function): Function;
     ary(func: Function, n?: number): Function;
-    before(n: number, function: Function): Function;
+    before(n: number, fn: Function): Function;
     bind(func: Function, thisArg: any, ...partials: Array<any>): Function;
     bindKey(obj: Object, key: string, ...partials: Array<any>): Function;
     curry(func: Function, arity?: number): Function;
@@ -464,5 +466,5 @@ declare module 'lodash' {
     support: Support;
     templateSettings: TemplateSettings;
   }
-  declare var exports: Lodash;
+    declare var exports: Lodash;
 }

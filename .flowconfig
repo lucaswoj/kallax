@@ -8,8 +8,7 @@
 
 [libs]
 
-interfaces
-code/core/interfaces
+code/interfaces
 
 [options]
 
