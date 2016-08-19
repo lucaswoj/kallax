@@ -3,10 +3,17 @@
 const {app} = require('electron').remote;
 const Path = require('path');
 const FS = require('fs');
+const Model = require('../Model');
 
 const pagesDir = Path.join(app.getAppPath(), 'data');
 
-module.exports = class KallaxPage {
+module.exports = class KallaxPage extends Model {
+
+    props: {
+        id: string;
+        title: string;
+        body: string;
+    };
 
     static getPages() {
         return FS.readdirSync(pagesDir).map(this.getPageFromFile.bind(this));
@@ -18,17 +25,10 @@ module.exports = class KallaxPage {
 
     static getPageFromFile(file) {
         return new KallaxPage({
+            id: file,
             title: Path.basename(file, '.md'),
             body: FS.readFileSync(Path.join(pagesDir, file), 'utf8')
         });
-    }
-
-    title: string;
-    body: string;
-
-    constructor({title, body}: {title: string, body: string}) {
-        this.title = title;
-        this.body = body;
     }
 
 };

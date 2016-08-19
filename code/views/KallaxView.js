@@ -38,11 +38,11 @@ module.exports = class KallaxView extends React.Component {
             <h2>Pages</h2>
             <ul>{KallaxPage.getPages().map((page) => {
                 return <li
-                    key={page.title}
+                    key={page.props.title}
                     onClick={() => { this.setState({activePage: page}); }}
-                    className={this.state.activePage.title === page.title ? 'active' : ''}
+                    className={this.state.activePage.props.title === page.props.title ? 'active' : ''}
                 >
-                    {page.title}
+                    {page.props.title}
                 </li>;
             })}</ul>
 
@@ -51,7 +51,7 @@ module.exports = class KallaxView extends React.Component {
 
     renderActivePage() {
         return <div className="active-page" style={{marginLeft: this.state.sidebarWidth}}>
-            <MarkdownView value={this.state.activePage.body} />
+            <MarkdownView value={this.state.activePage.props.body} />
         </div>;
     }
 
