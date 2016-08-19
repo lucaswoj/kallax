@@ -6,11 +6,10 @@
 * Prefer interfaces to composition
 * Prefer composition to inheritance
 * Prefer the simplest robust solution
-* Prefer self-hosted-ness
-* Ruthlessly factor out orthogonal functionality
+* Err on the side of solving problems at a lower layer of abstraction
+* Ruthlessly factor low cohesion functionality into separate modules
 * Ruthlessly simplify architecture
 * Prefer the solution with the least code
-* Prefer defaults and conventions whenever they are clear
 
 ## Stylesheets
 
