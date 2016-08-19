@@ -1,7 +1,7 @@
 // @flow
 
 const Model = require('../Model');
-const ModelArray = require('../ModelArray');
+const LazyPromiseArray = require('../LazyPromiseArray');
 const _ = require('lodash');
 const Querystring = require('querystring');
 const assert = require('assert');
@@ -27,7 +27,7 @@ const PER_PAGE = 50;
 
 module.exports = class GithubNotification extends Model<Props> {
 
-    static all: ModelArray<GithubNotification> = new ModelArray(() => {
+    static all: LazyPromiseArray<GithubNotification> = new LazyPromiseArray(() => {
 
         const fetchPage = _.memoize((index) =>
             fetch('https://api.github.com/notifications?' + Querystring.stringify({
@@ -50,7 +50,7 @@ module.exports = class GithubNotification extends Model<Props> {
                 })
             }),
 
-            fetch: _.memoize((index: number): Promise<GithubNotification> =>
+            fetchAtIndex: _.memoize((index: number): Promise<GithubNotification> =>
                 fetchPage(Math.floor(index / PER_PAGE)).then((page) =>
                     new GithubNotification(page.items[index % PER_PAGE])
                 )
