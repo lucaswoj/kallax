@@ -25,6 +25,7 @@ class LazyPromiseArray<T> extends EventEmitter {
         };
 
         // Create a lazy "length" property
+        // flow-disable-line
         Object.defineProperty(this, 'length', {
             configurable: true,
             get: () => {

@@ -46,8 +46,8 @@ module.exports = class GithubNotification extends Model<Props> {
             length: fetchPage(0).then((firstPage) => {
                 const lastPageIndex = parseLinkHeader(firstPage.link).last;
                 return fetchPage(lastPageIndex).then((lastPage) => {
-                    return lastPageIndex * PER_PAGE + lastPage.items.length
-                })
+                    return lastPageIndex * PER_PAGE + lastPage.items.length;
+                });
             }),
 
             fetchAtIndex: _.memoize((index: number): Promise<GithubNotification> =>
@@ -70,7 +70,7 @@ function parseLinkHeader(header) {
         const link = links[i];
         const linkParts = link.split(';');
         assert(linkParts.length === 2);
-        const index = parseInt(URL.parse(linkParts[0].slice(1, -1), true).query.page);
+        const index = parseInt((URL.parse(linkParts[0].slice(1, -1), true).query || {}).page);
         const name = linkParts[1].replace(/rel="(.+)"/, '$1').trim();
         output[name] = index;
     }
