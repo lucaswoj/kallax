@@ -6,21 +6,50 @@ const _ = require('lodash');
 const Querystring = require('querystring');
 const assert = require('assert');
 const URL = require('url');
+const camelcaseKeys = require('camelcase-keys');
 
 type Props = {
     id: string;
     repository: {
         id: number;
+        owner: {
+            login: string;
+            id: number;
+            avatarUrl: string;
+            gravatarId: string;
+            url: string;
+            htmlUrl: string;
+            followersUrl: string;
+            followingUrl: string;
+            gistsUrl: string;
+            starredUrl: string;
+            subscriptionsUrl: string;
+            organizationsUrl: string;
+            reposUrl: string;
+            eventsUrl: string;
+            receivedEventsUrl: string;
+            type: string;
+            siteAdmin: boolean;
+        };
         name: string;
         fullName: string;
         description: string;
+        private: boolean;
+        fork: boolean;
+        url: string;
+        htmlUrl: string;
     };
     subject: {
         title: string;
         url: string;
         latestCommentUrl: string;
-        type: "Issue";
+        type: string;
     };
+    reason: string;
+    unread: boolean;
+    updatedAt: string;
+    lastReadAt: string;
+    url: string;
 };
 
 const PER_PAGE = 50;
@@ -52,7 +81,7 @@ module.exports = class GithubNotification extends Model<Props> {
 
             fetchAtIndex: _.memoize((index: number): Promise<GithubNotification> =>
                 fetchPage(Math.floor(index / PER_PAGE)).then((page) =>
-                    new GithubNotification(page.items[index % PER_PAGE])
+                    new GithubNotification(camelcaseKeys(page.items[index % PER_PAGE]))
                 )
             )
         };

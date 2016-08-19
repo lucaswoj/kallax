@@ -24,6 +24,7 @@
     "babel-preset-stage-0": "^6.5.0",
     "babel-register": "^6.11.6",
     "babel-runtime": "^6.6.1",
+    "camelcase-keys": "^3.0.0",
     "electron-mocha": "^2.2.0",
     "electron-prebuilt": "^0.37.8",
     "electron-react-devtools": "^0.3.1",
