@@ -1,7 +1,6 @@
 // @flow
 
 const React = require('react');
-const renderMarkdown = require('marked');
 const FS = require('fs');
 const Babel = require('babel-core');
 const vm = require('vm');
@@ -11,7 +10,7 @@ const babelOptions = JSON.parse(
     FS.readFileSync(Path.join(__dirname, '../../.babelrc'), 'utf8')
 );
 
-module.exports = class MarkdownView extends React.Component {
+module.exports = class KallaxContentView extends React.Component {
 
     props: { value: string; };
 
@@ -27,13 +26,9 @@ module.exports = class MarkdownView extends React.Component {
                 const React = require('react');
                 const GithubNotification = require('${Path.join(__dirname, '../models/GithubNotification')}');
                 const PromiseView = require('${Path.join(__dirname, './PromiseView')}');
-                <div>${unescape(renderMarkdown(this.props.value))}</div>
+                <div>${this.props.value}</div>
             `, babelOptions).code
         );
     }
 
 };
-
-function unescape(string) {
-    return string.replace(/&gt;/g, '>');
-}
