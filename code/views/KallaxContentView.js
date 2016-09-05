@@ -27,6 +27,8 @@ module.exports = class KallaxContentView extends React.Component {
                 const GithubNotification = require('${Path.join(__dirname, '../models/GithubNotification')}');
                 const PromiseView = require('${Path.join(__dirname, './PromiseView')}');
                 const GithubNotificationView = require('${Path.join(__dirname, './GithubNotificationView')}');
+                const ArrayView = require('${Path.join(__dirname, './ArrayView')}');
+
                 <div>${this.props.value}</div>
             `, babelOptions).code
         );
