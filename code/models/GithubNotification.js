@@ -72,14 +72,15 @@ module.exports = class GithubNotification extends Model<Props> {
         );
 
         return {
-            length: fetchPage(0).then((firstPage) => {
-                const lastPageIndex = parseLinkHeader(firstPage.link).last;
-                return fetchPage(lastPageIndex).then((lastPage) => {
-                    return lastPageIndex * PER_PAGE + lastPage.items.length;
-                });
-            }),
+            getLength: () =>
+                fetchPage(0).then((firstPage) => {
+                    const lastPageIndex = parseLinkHeader(firstPage.link).last;
+                    return fetchPage(lastPageIndex).then((lastPage) => {
+                        return lastPageIndex * PER_PAGE + lastPage.items.length;
+                    });
+                }),
 
-            fetchAtIndex: _.memoize((index: number): Promise<GithubNotification> =>
+            get: _.memoize((index: number): Promise<GithubNotification> =>
                 fetchPage(Math.floor(index / PER_PAGE)).then((page) =>
                     new GithubNotification(camelcaseKeys(page.items[index % PER_PAGE]))
                 )

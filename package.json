@@ -4,7 +4,10 @@
   "description": "",
   "main": "code/index.js",
   "scripts": {
-    "test": "echo eslint && eslint --fix code tests && echo flow && flow && echo mocha && electron-mocha tests/*.js",
+    "test-eslint": "eslint --fix code tests",
+    "test-flow": "flow",
+    "test-mocha": "mocha --compilers js:babel-register tests/*.js",
+    "test": "npm run test-eslint && npm run test-flow && npm run test-mocha",
     "start": "electron ."
   },
   "author": "",
@@ -25,7 +28,6 @@
     "babel-register": "^6.11.6",
     "babel-runtime": "^6.6.1",
     "camelcase-keys": "^3.0.0",
-    "electron-mocha": "^2.2.0",
     "electron-prebuilt": "^0.37.8",
     "electron-react-devtools": "^0.3.1",
     "eslint": "^2.9.0",
@@ -39,6 +41,7 @@
     "marked": "^0.3.5",
     "mocha": "^2.5.3",
     "react": "^15.0.1",
-    "react-dom": "^15.0.1"
+    "react-dom": "^15.0.1",
+    "sinon": "^1.17.5"
   }
 }

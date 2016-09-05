@@ -7,7 +7,7 @@ module.exports = class GithubNotificationView extends React.Component {
 
     props: {
         value: GithubNotification;
-    }
+    };
 
     render() {
         return <div>

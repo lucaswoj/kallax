@@ -3,7 +3,7 @@
 const Model = require('../Model');
 
 type Props = {
-    id: number;
+    id: string;
     url: string;
     repositoryUrl: string;
     labelsUrl: string;
@@ -87,10 +87,10 @@ type Props = {
         };
         openIssues: number;
         closedIssues: number;
-        createdAt: sring;
-        updatedAt: sring;
-        closedAt: sring;
-        dueOn: sring;
+        createdAt: string;
+        updatedAt: string;
+        closedAt: string;
+        dueOn: string;
     };
     locked: boolean;
     comments: number;

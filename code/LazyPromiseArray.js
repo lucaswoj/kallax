@@ -1,47 +1,38 @@
 // @flow
 
-const {EventEmitter} = require('events');
 const _ = require('lodash');
 
-class LazyPromiseArray<T> extends EventEmitter {
+class LazyPromiseArray<T> {
 
-    fetchAtIndex: (index: number) => Promise<T>;
-    refresh: () => void;
-    length: Promise<number>;
+    _hardRefresh: () => void;
+    _needsHardRefresh: boolean = true;
+    _get: (index: number) => Promise<T>;
+    _getLength: () => Promise<number>;
 
-    constructor(refresh: () => {fetchAtIndex: (index: number) => Promise<T>, length: Promise<number>}) {
-        super();
-
-        this.refresh = () => {
-            const {fetchAtIndex, length} = refresh();
-            this.fetchAtIndex = fetchAtIndex;
-            Object.defineProperty(this, 'length', {value: length});
+    constructor(refresh: (refreshCount: number) => {get: (index: number) => Promise<T>, getLength: () => Promise<number>}) {
+        let refreshCount = 0;
+        this._hardRefresh = () => {
+            const {get, getLength} = refresh(refreshCount++);
+            this._get = _.memoize(get);
+            this._getLength = _.memoize(getLength);
+            this._needsHardRefresh = false;
         };
-
-        // Create a lazy "fetchAtIndex" method
-        this.fetchAtIndex = (index: number) => {
-            this.refresh();
-            return this.fetchAtIndex(index);
-        };
-
-        // Create a lazy "length" property
-        // flow-disable-line
-        Object.defineProperty(this, 'length', {
-            configurable: true,
-            get: () => {
-                this.refresh();
-                return this.length;
-            }
-        });
     }
 
-    fetchSlice(startIndex: number, endIndex: number): Promise<Array<T>> {
-        return Promise.all(_.range(startIndex, endIndex).map((index) => this.fetchAtIndex(index)));
+    refresh() {
+        delete this._get;
+        delete this._getLength;
+        this._needsHardRefresh = true;
     }
 
-    fetch(): Promise<Array<T>> {
-        if (!this.length) this.refresh();
-        return this.length.then((length) => this.fetchSlice(0, length));
+    get(index: number): Promise<T> {
+        if (this._needsHardRefresh) this._hardRefresh();
+        return this._get(index);
+    }
+
+    get length(): Promise<number> {
+        if (this._needsHardRefresh) this._hardRefresh();
+        return this._getLength();
     }
 
 }
