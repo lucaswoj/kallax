@@ -30,6 +30,12 @@ class LazyPromiseArray<T> {
         return this._get(index);
     }
 
+    slice(startIndex: number = 0, endIndex?: number): Promise<Array<T>> {
+        return Promise.resolve(endIndex || this.length).then((endIndex: number) => {
+            return Promise.all(_.range(startIndex, endIndex).map(this.get.bind(this)));
+        });
+    }
+
     get length(): Promise<number> {
         if (this._needsHardRefresh) this._hardRefresh();
         return this._getLength();

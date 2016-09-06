@@ -16,7 +16,7 @@ describe('LazyPromiseArray', () => {
             }));
         }
 
-        it('should return value', (callback) => {
+        it('should return the correct value', (callback) => {
             const array = create();
 
             array.get(1).then((value) => {
@@ -25,13 +25,51 @@ describe('LazyPromiseArray', () => {
             });
         });
 
-        it('should return refreshed value', () => {
+        it('should return refreshed the correct value', () => {
             const array = create();
 
             array.refresh();
 
             array.get(1).then((value) => {
                 assert.equal(value, 2);
+            });
+        });
+
+    });
+
+    describe('slice', () => {
+
+        function create() {
+            return new LazyPromiseArray(() => ({
+                get: (i) => Promise.resolve(i),
+                getLength: () => Promise.resolve(5)
+            }));
+        }
+
+        it('should return the correct value with 0 arguments', (callback) => {
+            const array = create();
+
+            array.slice().then((array) => {
+                assert.deepEqual(array, [0, 1, 2, 3, 4]);
+                callback();
+            });
+        });
+
+        it('should return the correct value with 1 argument', (callback) => {
+            const array = create();
+
+            array.slice(1).then((array) => {
+                assert.deepEqual(array, [1, 2, 3, 4]);
+                callback();
+            });
+        });
+
+        it('should return the correct value with 2 arguments', (callback) => {
+            const array = create();
+
+            array.slice(1, 4).then((array) => {
+                assert.deepEqual(array, [1, 2, 3]);
+                callback();
             });
         });
 

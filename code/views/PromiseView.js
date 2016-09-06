@@ -3,7 +3,7 @@
 const React = require('react');
 
 type Props<T> = {
-    value: T | Promise<T>;
+    promise: Promise<T>;
     render: (value: T) => React.Element;
 }
 
@@ -19,18 +19,13 @@ module.exports = class PromiseView<T> extends React.Component<void, Props<T>, St
     constructor(props: Props<T>) {
         super(props);
 
-        if (this.props.value instanceof Promise) {
-            this.props.value.then((value: T) => {
-                this.setState({value: value, state: 'resolved'});
-            }, (error: Error) => {
+        this.state = {state: 'loading'};
+        this.props.promise
+            .then((value: T) => this.setState({value: value, state: 'resolved'}))
+            .catch((error: Error) => {
                 this.setState({state: 'errored'});
                 throw error;
             });
-            this.state = {state: 'loading'};
-
-        } else {
-            this.state = {value: this.props.value, state: 'resolved'};
-        }
     }
 
     render() {
