@@ -12,10 +12,13 @@ type Props<T> = {
 module.exports = class ArrayView<T> extends React.Component<void, Props<T>, void> {
 
     render() {
-        return <PromiseView
-            promise={this.props.array.slice(0, 20)}
-            render={(array: Array<T>) => <div>{array.map(this.props.renderElement)}</div>}
-        />;
+        const output = [];
+        for (let i = 0; i < 20; i++) {
+            output.push(<PromiseView promise={this.props.array.get(i)} render={this.props.renderElement} />);
+        }
+        return <div>{output}</div>;
     }
+
+
 
 };

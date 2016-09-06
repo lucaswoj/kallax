@@ -2,12 +2,8 @@
 
 const React = require('react');
 
-type Thenable<T> = {
-    then: (callback: (value: T) => void, errorCallback?: (error: Error) => void) => void
-}
-
 type Props<T> = {
-    promise: Thenable<T>;
+    promise: Promise<T>;
     render: (value: T) => React.Element;
 }
 
