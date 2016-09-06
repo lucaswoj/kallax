@@ -7,7 +7,7 @@ const sinon = require('sinon');
 
 describe('LazyPromiseArray', () => {
 
-    describe('values', () => {
+    describe('get', () => {
 
         function create() {
             return new LazyPromiseArray((j) => ({
@@ -73,6 +73,17 @@ describe('LazyPromiseArray', () => {
             });
         });
 
+        it('should not call "hard refresh" function before first "get"', () => {
+            const refresh = sinon.spy(() => ({
+                get: () => Promise.resolve(null),
+                getLength: () => Promise.resolve(0)
+            }));
+            const array = new LazyPromiseArray(refresh);
+
+            array.slice();
+            assert.equal(refresh.callCount, 0);
+        });
+
     });
 
     describe('length', () => {
@@ -113,11 +124,7 @@ describe('LazyPromiseArray', () => {
             array.refresh();
         });
 
-    });
-
-    describe('call count', () => {
-
-        it('should not call "refresh" function before first access', () => {
+        it('should not call "hard refresh" function before first "get"', () => {
             const refresh = sinon.spy(() => ({
                 get: () => Promise.resolve(null),
                 getLength: () => Promise.resolve(0)
@@ -128,7 +135,7 @@ describe('LazyPromiseArray', () => {
             assert.equal(refresh.callCount, 0);
         });
 
-        it('should call "refresh" function once per refresh with access', () => {
+        it('should call "hard refresh" function once per refresh access', () => {
             const refresh = sinon.spy(() => ({
                 get: () => Promise.resolve(null),
                 getLength: () => Promise.resolve(0)
@@ -175,4 +182,5 @@ describe('LazyPromiseArray', () => {
         });
 
     });
+
 });

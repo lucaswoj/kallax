@@ -34,9 +34,18 @@ class LazyPromiseArray<T> extends EventEmitter {
         return this._get(index);
     }
 
-    slice(startIndex: number = 0, endIndex?: number): Promise<Array<T>> {
-        return Promise.resolve(endIndex || this.length).then((endIndex: number) => {
-            return Promise.all(_.range(startIndex, endIndex).map(this.get.bind(this)));
+    slice(startIndex: number = 0, endIndex?: number): LazyPromiseArray<T> {
+        const array = new LazyPromiseArray(() => ({
+            get: (i: number) => this.get(i + startIndex),
+            getLength: () => Promise.resolve(endIndex || this.length).then((endIndex) => endIndex - startIndex)
+        }));
+        this.on('refresh', array.refresh.bind(array));
+        return array;
+    }
+
+    then(callback: (array: Array<T>) => void, errorCallback?: (error: Error) => void) {
+        this.length.then((length: number) => {
+            Promise.all(_.range(0, length).map(this.get.bind(this))).then(callback, errorCallback);
         });
     }
 

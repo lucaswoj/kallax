@@ -2,8 +2,12 @@
 
 const React = require('react');
 
+type Thenable<T> = {
+    then: (callback: (value: T) => void, errorCallback?: (error: Error) => void) => void
+}
+
 type Props<T> = {
-    promise: Promise<T>;
+    promise: Thenable<T>;
     render: (value: T) => React.Element;
 }
 
@@ -21,11 +25,13 @@ module.exports = class PromiseView<T> extends React.Component<void, Props<T>, St
 
         this.state = {state: 'loading'};
         this.props.promise
-            .then((value: T) => this.setState({value: value, state: 'resolved'}))
-            .catch((error: Error) => {
-                this.setState({state: 'errored'});
-                throw error;
-            });
+            .then(
+                (value: T) => this.setState({value: value, state: 'resolved'}),
+                (error: Error) => {
+                    this.setState({state: 'errored'});
+                    throw error;
+                }
+            );
     }
 
     render() {
