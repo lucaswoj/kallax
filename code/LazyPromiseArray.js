@@ -1,8 +1,9 @@
 // @flow
 
 const _ = require('lodash');
+const {EventEmitter} = require('events');
 
-class LazyPromiseArray<T> {
+class LazyPromiseArray<T> extends EventEmitter {
 
     _hardRefresh: () => void;
     _needsHardRefresh: boolean = true;
@@ -10,6 +11,8 @@ class LazyPromiseArray<T> {
     _getLength: () => Promise<number>;
 
     constructor(refresh: (refreshCount: number) => {get: (index: number) => Promise<T>, getLength: () => Promise<number>}) {
+        super();
+
         let refreshCount = 0;
         this._hardRefresh = () => {
             const {get, getLength} = refresh(refreshCount++);
@@ -23,6 +26,7 @@ class LazyPromiseArray<T> {
         delete this._get;
         delete this._getLength;
         this._needsHardRefresh = true;
+        this.emit('refresh');
     }
 
     get(index: number): Promise<T> {

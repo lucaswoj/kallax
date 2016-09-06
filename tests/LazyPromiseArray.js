@@ -101,6 +101,20 @@ describe('LazyPromiseArray', () => {
 
     });
 
+    describe('refresh', () => {
+
+        it('should fire the refresh event', (callback) => {
+            const array = new LazyPromiseArray(() => ({
+                get: () => Promise.resolve(null),
+                getLength: () => Promise.resolve(0)
+            }));
+
+            array.on('refresh', callback);
+            array.refresh();
+        });
+
+    });
+
     describe('call count', () => {
 
         it('should not call "refresh" function before first access', () => {
