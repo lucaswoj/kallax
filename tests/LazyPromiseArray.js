@@ -35,6 +35,117 @@ describe('LazyPromiseArray', () => {
             });
         });
 
+        it('should not call "hard refresh" function before first "get"', () => {
+            const refresh = sinon.spy(() => ({
+                get: () => Promise.resolve(null),
+                getLength: () => Promise.resolve(0)
+            }));
+            const array = new LazyPromiseArray(refresh);
+
+            array.refresh();
+            assert.equal(refresh.callCount, 0);
+        });
+
+        it('should call "hard refresh" function once per refresh with "get"', () => {
+            const refresh = sinon.spy(() => ({
+                get: () => Promise.resolve(null),
+                getLength: () => Promise.resolve(0)
+            }));
+            const array = new LazyPromiseArray(refresh);
+
+            array.get(1);
+            array.refresh();
+            array.get(1);
+
+            assert.equal(refresh.callCount, 2);
+        });
+
+        it('should call internal "get" function once per index per refresh', () => {
+            const get = sinon.spy(() => Promise.resolve(null));
+            const array = new LazyPromiseArray(() => ({
+                get: get,
+                getLength: () => Promise.resolve(0)
+            }));
+
+            array.get(1);
+            array.get(1);
+            array.refresh();
+            array.get(1);
+            array.get(1);
+
+            assert.equal(get.callCount, 2);
+        });
+
+    });
+
+    describe('length', () => {
+
+        function create() {
+            return new LazyPromiseArray((j) => ({
+                get: () => Promise.resolve(0),
+                getLength: () => Promise.resolve(j)
+            }));
+        }
+
+        it('should return length', () => {
+            const array = create();
+            array.length.then((value) => {
+                assert.equal(value, 0);
+            });
+        });
+
+        it('should return refreshed length', () => {
+            const array = create();
+            array.refresh();
+            array.length.then((value) => {
+                assert.equal(value, 1);
+            });
+        });
+
+        it('should call "hard refresh" function once per refresh with "length"', () => {
+            const refresh = sinon.spy(() => ({
+                get: () => Promise.resolve(null),
+                getLength: () => Promise.resolve(0)
+            }));
+            const array = new LazyPromiseArray(refresh);
+
+            array.length;
+            array.refresh();
+            array.length;
+
+            assert.equal(refresh.callCount, 2);
+        });
+
+        it('should call internal "get length" function once per refresh', () => {
+            const length = Promise.resolve(0);
+            const getLength = sinon.spy(() => length);
+            const array = new LazyPromiseArray(() => ({
+                get: () => Promise.resolve(null),
+                getLength: getLength
+            }));
+
+            array.length;
+            array.length;
+            array.refresh();
+            array.length;
+            array.length;
+            assert.equal(getLength.callCount, 2);
+        });
+
+    });
+
+    describe('refresh', () => {
+
+        it('should fire the refresh event', (callback) => {
+            const array = new LazyPromiseArray(() => ({
+                get: () => Promise.resolve(null),
+                getLength: () => Promise.resolve(0)
+            }));
+
+            array.on('refresh', callback);
+            array.refresh();
+        });
+
     });
 
     describe('slice', () => {
@@ -82,103 +193,6 @@ describe('LazyPromiseArray', () => {
 
             array.slice();
             assert.equal(refresh.callCount, 0);
-        });
-
-    });
-
-    describe('length', () => {
-
-        function create() {
-            return new LazyPromiseArray((j) => ({
-                get: () => Promise.resolve(0),
-                getLength: () => Promise.resolve(j)
-            }));
-        }
-
-        it('should return length', () => {
-            const array = create();
-            array.length.then((value) => {
-                assert.equal(value, 0);
-            });
-        });
-
-        it('should return refreshed length', () => {
-            const array = create();
-            array.refresh();
-            array.length.then((value) => {
-                assert.equal(value, 1);
-            });
-        });
-
-    });
-
-    describe('refresh', () => {
-
-        it('should fire the refresh event', (callback) => {
-            const array = new LazyPromiseArray(() => ({
-                get: () => Promise.resolve(null),
-                getLength: () => Promise.resolve(0)
-            }));
-
-            array.on('refresh', callback);
-            array.refresh();
-        });
-
-        it('should not call "hard refresh" function before first "get"', () => {
-            const refresh = sinon.spy(() => ({
-                get: () => Promise.resolve(null),
-                getLength: () => Promise.resolve(0)
-            }));
-            const array = new LazyPromiseArray(refresh);
-
-            array.refresh();
-            assert.equal(refresh.callCount, 0);
-        });
-
-        it('should call "hard refresh" function once per refresh access', () => {
-            const refresh = sinon.spy(() => ({
-                get: () => Promise.resolve(null),
-                getLength: () => Promise.resolve(0)
-            }));
-            const array = new LazyPromiseArray(refresh);
-
-            array.get(1);
-            array.refresh();
-            array.get(1);
-
-            assert.equal(refresh.callCount, 2);
-        });
-
-        it('should call "get" function once per index per refresh', () => {
-            const get = sinon.spy(() => Promise.resolve(null));
-            const array = new LazyPromiseArray(() => ({
-                get: get,
-                getLength: () => Promise.resolve(0)
-            }));
-
-            array.get(1);
-            array.get(1);
-            array.refresh();
-            array.get(1);
-            array.get(1);
-
-            assert.equal(get.callCount, 2);
-        });
-
-        it('should call "getLength" function once per refresh', () => {
-            const length = Promise.resolve(0);
-            const getLength = sinon.spy(() => length);
-            const array = new LazyPromiseArray(() => ({
-                get: () => Promise.resolve(null),
-                getLength: getLength
-            }));
-
-            assert.equal(array.length, length);
-            assert.equal(array.length, length);
-            array.refresh();
-            assert.equal(array.length, length);
-            assert.equal(array.length, length);
-            assert.equal(getLength.callCount, 2);
         });
 
     });
