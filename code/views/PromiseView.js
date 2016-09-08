@@ -1,10 +1,14 @@
 // @flow
 
 const React = require('react');
+const LoadingView = require('./LoadingView');
+const ErroredView = require('./ErroredView');
 
 type Props<T> = {
     promise: Promise<T>;
     render: (value: T) => React.Element;
+    renderLoading?: (value: T) => React.Element;
+    renderErrored?: (value: T) => React.Element;
 }
 
 type State<T> = {
@@ -35,10 +39,10 @@ module.exports = class PromiseView<T> extends React.Component<void, Props<T>, St
             return this.props.render(this.state.value);
 
         } else if (this.state.state === 'loading') {
-            return <div className="loading">Loading</div>;
+            return this.props.renderLoading ? this.props.renderLoading() : <LoadingView />;
 
         } else {
-            return <div className="errored">Errored</div>;
+            return this.props.renderErrored ? this.props.renderErrored() : <ErroredView />;
         }
     }
 
