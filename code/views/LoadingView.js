@@ -2,6 +2,6 @@
 
 const React = require('react');
 
-module.exports = function LoadingView(props: {}) {
+module.exports = function LoadingView() {
     return <div className="LoadingView">Loading</div>;
-}
+};

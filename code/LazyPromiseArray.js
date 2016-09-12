@@ -31,7 +31,9 @@ class LazyPromiseArray<T> extends EventEmitter {
 
     get(index: number): Promise<T> {
         if (this._needsHardRefresh) this._hardRefresh();
-        return this._get(index);
+        return this.length.then((length) => {
+            return (index >= length || index < 0) ? Promise.reject('Out of bounds access') : this._get(index);
+        });
     }
 
     slice(startIndex: number = 0, endIndex?: number): LazyPromiseArray<T> {

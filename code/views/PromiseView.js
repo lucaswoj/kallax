@@ -7,8 +7,8 @@ const ErroredView = require('./ErroredView');
 type Props<T> = {
     promise: Promise<T>;
     render: (value: T) => React.Element;
-    renderLoading?: (value: T) => React.Element;
-    renderErrored?: (value: T) => React.Element;
+    renderLoading?: () => React.Element;
+    renderErrored?: () => React.Element;
 }
 
 type State<T> = {

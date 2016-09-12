@@ -12,7 +12,7 @@ describe('LazyPromiseArray', () => {
         function create() {
             return new LazyPromiseArray((j) => ({
                 get: (i) => Promise.resolve(j + i),
-                getLength: () => Promise.resolve(0)
+                getLength: () => Promise.resolve(3)
             }));
         }
 
@@ -48,7 +48,7 @@ describe('LazyPromiseArray', () => {
 
         it('should call "hard refresh" function once per refresh with "get"', () => {
             const refresh = sinon.spy(() => ({
-                get: () => Promise.resolve(null),
+                get: () => Promise.resolve(5),
                 getLength: () => Promise.resolve(0)
             }));
             const array = new LazyPromiseArray(refresh);
@@ -60,20 +60,42 @@ describe('LazyPromiseArray', () => {
             assert.equal(refresh.callCount, 2);
         });
 
-        it('should call internal "get" function once per index per refresh', () => {
-            const get = sinon.spy(() => Promise.resolve(null));
+        it('should call internal "get" function once per index per refresh', (callback) => {
+            const get = sinon.spy(() => Promise.resolve(5));
             const array = new LazyPromiseArray(() => ({
                 get: get,
-                getLength: () => Promise.resolve(0)
+                getLength: () => Promise.resolve(3)
             }));
 
             array.get(1);
-            array.get(1);
-            array.refresh();
-            array.get(1);
-            array.get(1);
+            array.get(1).then(() => {
+                array.refresh();
+                array.get(1);
+                array.get(1).then(() => {
+                    assert.equal(2, get.callCount);
+                    callback();
+                });
+            });
+        });
 
-            assert.equal(get.callCount, 2);
+        describe('out-of-bounds access', () => {
+            function test(index, callback) {
+                const array = new LazyPromiseArray(() => ({
+                    get: () => Promise.resolve(5),
+                    getLength: () => Promise.resolve(1)
+                }));
+                array.get(index).then(() => assert(false)).catch(() => {
+                    callback();
+                });
+            }
+
+            it('should throw an error for access < 0', (callback) => {
+                test(-1, callback);
+            });
+
+            it('should throw an error for access > length', (callback) => {
+                test(1, callback);
+            });
         });
 
     });
@@ -136,13 +158,13 @@ describe('LazyPromiseArray', () => {
 
     describe('refresh', () => {
 
-        it('should fire the refresh event', (callback) => {
+        it('should fire the change event', (callback) => {
             const array = new LazyPromiseArray(() => ({
                 get: () => Promise.resolve(null),
                 getLength: () => Promise.resolve(0)
             }));
 
-            array.on('refresh', callback);
+            array.on('change', callback);
             array.refresh();
         });
 
