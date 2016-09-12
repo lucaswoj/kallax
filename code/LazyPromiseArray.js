@@ -26,7 +26,7 @@ class LazyPromiseArray<T> extends EventEmitter {
         delete this._get;
         delete this._getLength;
         this._needsHardRefresh = true;
-        this.emit('refresh');
+        this.emit('change');
     }
 
     get(index: number): Promise<T> {
@@ -39,7 +39,7 @@ class LazyPromiseArray<T> extends EventEmitter {
             get: (i: number) => this.get(i + startIndex),
             getLength: () => Promise.resolve(endIndex || this.length).then((endIndex) => endIndex - startIndex)
         }));
-        this.on('refresh', array.refresh.bind(array));
+        this.on('change', array.refresh.bind(array));
         return array;
     }
 

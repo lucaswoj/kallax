@@ -23,7 +23,7 @@ module.exports = class ArrayView<T: {id: number | string}> extends React.Compone
         this.state = {endIndex: 20};
 
         this.renderedElements = [];
-        this.props.array.on('refresh', () => {
+        this.props.array.on('change', () => {
             this.renderedElements = [];
             this.forceUpdate();
         });
