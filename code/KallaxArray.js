@@ -3,28 +3,28 @@
 const _ = require('lodash');
 const {EventEmitter} = require('events');
 
-class LazyPromiseArray<T> extends EventEmitter {
+class KallaxArray<T> extends EventEmitter {
 
     _hardRefresh: () => void;
     _needsHardRefresh: boolean = true;
     _get: (index: number) => Promise<T>;
-    _getLength: () => Promise<number>;
+    _length: () => Promise<number>;
 
-    constructor(refresh: (refreshCount: number) => {get: (index: number) => Promise<T>, getLength: () => Promise<number>}) {
+    constructor(refresh: (refreshCount: number) => {get: (index: number) => Promise<T>, length: () => Promise<number>}) {
         super();
 
         let refreshCount = 0;
         this._hardRefresh = () => {
-            const {get, getLength} = refresh(refreshCount++);
+            const {get, length} = refresh(refreshCount++);
             this._get = _.memoize(get);
-            this._getLength = _.memoize(getLength);
+            this._length = _.memoize(length);
             this._needsHardRefresh = false;
         };
     }
 
     refresh() {
         delete this._get;
-        delete this._getLength;
+        delete this._length;
         this._needsHardRefresh = true;
         this.emit('change');
     }
@@ -36,10 +36,10 @@ class LazyPromiseArray<T> extends EventEmitter {
         });
     }
 
-    slice(startIndex: number = 0, endIndex?: number): LazyPromiseArray<T> {
-        const array = new LazyPromiseArray(() => ({
+    slice(startIndex: number = 0, endIndex?: number): KallaxArray<T> {
+        const array = new KallaxArray(() => ({
             get: (i: number) => this.get(i + startIndex),
-            getLength: () => Promise.resolve(endIndex || this.length).then((endIndex) => endIndex - startIndex)
+            length: () => Promise.resolve(endIndex || this.length).then((endIndex) => endIndex - startIndex)
         }));
         this.on('change', array.refresh.bind(array));
         return array;
@@ -53,9 +53,9 @@ class LazyPromiseArray<T> extends EventEmitter {
 
     get length(): Promise<number> {
         if (this._needsHardRefresh) this._hardRefresh();
-        return this._getLength();
+        return this._length();
     }
 
 }
 
-module.exports = LazyPromiseArray;
+module.exports = KallaxArray;

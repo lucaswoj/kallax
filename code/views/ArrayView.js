@@ -1,13 +1,13 @@
 // @flow
 
 const React = require('react');
-const LazyPromiseArray = require('../LazyPromiseArray');
+const KallaxArray = require('../KallaxArray');
 const PromiseView = require('./PromiseView');
 const LoadingView = require('./LoadingView');
 const ErroredView = require('./ErroredView');
 
 type Props<T> = {
-    array: LazyPromiseArray<T>;
+    array: KallaxArray<T>;
     renderElement: (value: T) => React.Element;
 }
 

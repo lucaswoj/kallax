@@ -1,7 +1,7 @@
 // @flow
 
 const Model = require('../Model');
-const LazyPromiseArray = require('../LazyPromiseArray');
+const KallaxArray = require('../KallaxArray');
 const _ = require('lodash');
 const Querystring = require('querystring');
 const assert = require('assert');
@@ -56,7 +56,7 @@ const PER_PAGE = 50;
 
 module.exports = class GithubNotification extends Model<Props> {
 
-    static all: LazyPromiseArray<GithubNotification> = new LazyPromiseArray(() => {
+    static all: KallaxArray<GithubNotification> = new KallaxArray(() => {
 
         const fetchPage = _.memoize((index) =>
             fetch('https://api.github.com/notifications?' + Querystring.stringify({
@@ -72,7 +72,7 @@ module.exports = class GithubNotification extends Model<Props> {
         );
 
         return {
-            getLength: () =>
+            length: () =>
                 fetchPage(0).then((firstPage) => {
                     const lastPageIndex = parseLinkHeader(firstPage.link).last;
                     return fetchPage(lastPageIndex).then((lastPage) => {
