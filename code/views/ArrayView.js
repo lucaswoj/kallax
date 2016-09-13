@@ -5,6 +5,7 @@ const KallaxArray = require('../KallaxArray');
 const PromiseView = require('./PromiseView');
 const LoadingView = require('./LoadingView');
 const ErroredView = require('./ErroredView');
+const bind = require('autobind-decorator');
 
 type Props<T> = {
     array: KallaxArray<T>;
@@ -25,10 +26,6 @@ module.exports = class ArrayView<T> extends React.Component<void, Props<T>, Stat
     averageElementHeight: number;
     containerElement: Element;
 
-    renderLoadingElementBound: () => React.Element;
-    renderErroredElementBound: () => React.Element;
-    onScrollBound: () => void;
-
     constructor(props: Props<T>) {
         super(props);
         this.state = {endIndex: 20};
@@ -38,10 +35,6 @@ module.exports = class ArrayView<T> extends React.Component<void, Props<T>, Stat
             this.renderedElements = [];
             this.forceUpdate();
         });
-
-        this.renderLoadingElementBound = this.renderLoadingElement.bind(this);
-        this.renderErroredElementBound = this.renderErroredElement.bind(this);
-        this.onScrollBound = this.onScroll.bind(this);
     }
 
     render() {
@@ -57,8 +50,8 @@ module.exports = class ArrayView<T> extends React.Component<void, Props<T>, Stat
                 key={i}
                 promise={this.props.array.get(i)}
                 render={this.props.renderElement}
-                renderLoading={this.renderLoadingElementBound}
-                renderErrored={this.renderErroredElementBound}
+                renderLoading={this.renderLoadingElement}
+                renderErrored={this.renderErroredElement}
             />;
         }
 
@@ -73,23 +66,26 @@ module.exports = class ArrayView<T> extends React.Component<void, Props<T>, Stat
 
     }
 
+    @bind
     renderLoadingElement() {
         return <div style={{height: this.averageElementHeight}}><LoadingView /></div>;
     }
 
+    @bind
     renderErroredElement() {
         return <div style={{height: this.averageElementHeight}}><ErroredView /></div>;
     }
 
     componentDidMount() {
         this.props.array.length.then((length) => this.setState({length: length}));
-        window.addEventListener('scroll', this.onScroll.bind(this));
+        window.addEventListener('scroll', this.onScroll);
     }
 
     componentWillUnmount() {
-        window.removeEventListener('scroll', this.onScrollBound);
+        window.removeEventListener('scroll', this.onScroll);
     }
 
+    @bind
     onScroll() {
         if (this.containerElement) {
             const endIndex = Math.ceil((window.innerHeight - this.containerElement.getBoundingClientRect().top) / this.averageElementHeight);
